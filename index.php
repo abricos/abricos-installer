@@ -49,7 +49,10 @@ if($_GET['content']){
     case 1: get_requirements(); break;
     case 2: get_database_settings(); break;
     case 3: create_config_file(); break;
-    case 4: include('intro.html'); break;
+    case 4: include('about.html'); break;
+    case 5: include('license.html'); break;
+    case 6: include('support.html'); break;
+    case 7: error('Удалите папку install !!!','71','index.php'); break;
   }
 }else include('about.html');
 
@@ -423,7 +426,7 @@ function create_config_file()
 	// Time to convert the data provided into a config file
 	$config_data = "<?php\n";
 	$config_data .= "/**\n";
-	$config_data .= "* @version $Id\n";
+	$config_data .= "* @version \$Id\n";
 	$config_data .= "* @package Abricos\n";
 	$config_data .= "* @copyright Copyright (C) 2008 Abricos. All rights reserved.\n";
 	$config_data .= "* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php\n*/\n\n\n/**\n";
@@ -662,8 +665,6 @@ function u_chmod($filename, $perms = CHMOD_READ)
 		}
 		else
 		{
-			global $phpbb_root_path, $phpEx;
-
 			// Determine owner/group of common.php file and the filename we want to change here
 			$common_php_owner = @fileowner(PATH_INSTALLATION.DS . 'common.' . $phpEx);
 			$common_php_group = @filegroup(PATH_INSTALLATION.DS . 'common.' . $phpEx);
@@ -831,7 +832,7 @@ function u_is_writable($file)
 		if (file_exists($file))
 		{
 			// Canonicalise path to absolute path
-			$file = phpbb_realpath($file);
+			$file = u_realpath($file);
 
 			if (is_dir($file))
 			{
@@ -1083,7 +1084,7 @@ function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix,
 	}
 
 	// Make sure we don't have a daft user who thinks having the SQLite database in the forum directory is a good idea
-	if ($dbms_details['DRIVER'] == 'sqlite' && stripos(phpbb_realpath($dbhost), phpbb_realpath('../')) === 0)
+	if ($dbms_details['DRIVER'] == 'sqlite' && stripos(u_realpath($dbhost), u_realpath('../')) === 0)
 	{
 		$error[] = 'Указанный файл базы данных находится в папке конференции. Необходимо переместить его в папку, недоступную из интернета.';
 		return false;
@@ -1360,31 +1361,21 @@ function get_tables($db)
 * Output an error message
 * If skip is true, return and continue execution, else exit
 */
-function error($error, $line, $file, $skip = false)
-{
-	global $lang, $db, $template;
-
+function error($error, $line, $file, $skip = false){
 	if ($skip)
-	{
-		$template->assign_block_vars('checks', array(
-			'S_LEGEND'	=> true,
-			'LEGEND'	=> $lang['INST_ERR'],
-		));
-
-		$template->assign_block_vars('checks', array(
-			'TITLE'		=> basename($file) . ' [ ' . $line . ' ]',
-			'RESULT'	=> '<b style="color:red">' . $error . '</b>',
-		));
-
-		return;
-	}
-
+		{
+			$legend = 'Ошибка при установке';
+			$title = basename($file) . ' [ ' . $line . ' ]';
+			$result = '<b style="color:red">' . $error . '</b>';
+			return;
+		}
+	
 	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
 	echo '<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">';
 	echo '<head>';
 	echo '<meta http-equiv="content-type" content="text/html; charset=utf-8" />';
-	echo '<title>' . $lang['INST_ERR_FATAL'] . '</title>';
-	echo '<link href="../adm/style/admin.css" rel="stylesheet" type="text/css" media="screen" />';
+	echo '<title>Критическая ошибка при установке</title>';
+	echo '<link href="style.css" rel="stylesheet" type="text/css" media="screen" />';
 	echo '</head>';
 	echo '<body id="errorpage">';
 	echo '<div id="wrap">';
@@ -1395,17 +1386,17 @@ function error($error, $line, $file, $skip = false)
 	echo '		<div class="panel">';
 	echo '			<span class="corners-top"><span></span></span>';
 	echo '			<div id="content">';
-	echo '				<h1>' . $lang['INST_ERR_FATAL'] . '</h1>';
-	echo '		<p>' . $lang['INST_ERR_FATAL'] . "</p>\n";
-	echo '		<p>' . basename($file) . ' [ ' . $line . " ]</p>\n";
-	echo '		<p><b>' . $error . "</b></p>\n";
+	echo '				<h1>Критическая ошибка при установке</h1>';
+	echo '		<p>Критическая ошибка при установке</p><br />';
+	echo '		<p>' . basename($file) . ' [ ' . $line . ' ]</p><br />';
+	echo '		<p><b>' . $error . '</b></p><bк />';
 	echo '			</div>';
 	echo '			<span class="corners-bottom"><span></span></span>';
 	echo '		</div>';
 	echo '		</div>';
 	echo '	</div>';
 	echo '	<div id="page-footer">';
-	echo '		Powered by <a href="http://www.phpbb.com/">phpBB</a>&reg; Forum Software &copy; phpBB Group';
+	echo '		Powered by <a href="http://abricos.org/">Abricos</a>';
 	echo '	</div>';
 	echo '</div>';
 	echo '</body>';
@@ -1421,19 +1412,196 @@ function error($error, $line, $file, $skip = false)
 
 function exit_handler()
 {
-	global $phpbb_hook, $config;
-
-	if (!empty($phpbb_hook) && $phpbb_hook->call_hook(__FUNCTION__))
-	{
-		if ($phpbb_hook->hook_return(__FUNCTION__))
-		{
-			return $phpbb_hook->hook_return_result(__FUNCTION__);
-		}
-	}
-
 	// As a pre-caution... some setups display a blank page if the flush() is not there.
 	(ob_get_level() > 0) ? @ob_flush() : @flush();
 
 	exit;
+}
+
+if (!function_exists('realpath'))
+{
+	/**
+	* A wrapper for realpath
+	* @ignore
+	*/
+	function u_realpath($path)
+	{
+		return u_own_realpath($path);
+	}
+}
+else
+{
+	/**
+	* A wrapper for realpath
+	*/
+	function u_realpath($path)
+	{
+		$realpath = realpath($path);
+
+		// Strangely there are provider not disabling realpath but returning strange values. :o
+		// We at least try to cope with them.
+		if ($realpath === $path || $realpath === false)
+		{
+			return u_own_realpath($path);
+		}
+
+		// Check for DIRECTORY_SEPARATOR at the end (and remove it!)
+		if (substr($realpath, -1) == DIRECTORY_SEPARATOR)
+		{
+			$realpath = substr($realpath, 0, -1);
+		}
+
+		return $realpath;
+	}
+}
+function u_own_realpath($path)
+{
+	// Now to perform funky shizzle
+
+	// Switch to use UNIX slashes
+	$path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
+	$path_prefix = '';
+
+	// Determine what sort of path we have
+	if (is_absolute($path))
+	{
+		$absolute = true;
+
+		if ($path[0] == '/')
+		{
+			// Absolute path, *NIX style
+			$path_prefix = '';
+		}
+		else
+		{
+			// Absolute path, Windows style
+			// Remove the drive letter and colon
+			$path_prefix = $path[0] . ':';
+			$path = substr($path, 2);
+		}
+	}
+	else
+	{
+		// Relative Path
+		// Prepend the current working directory
+		if (function_exists('getcwd'))
+		{
+			// This is the best method, hopefully it is enabled!
+			$path = str_replace(DIRECTORY_SEPARATOR, '/', getcwd()) . '/' . $path;
+			$absolute = true;
+			if (preg_match('#^[a-z]:#i', $path))
+			{
+				$path_prefix = $path[0] . ':';
+				$path = substr($path, 2);
+			}
+			else
+			{
+				$path_prefix = '';
+			}
+		}
+		else if (isset($_SERVER['SCRIPT_FILENAME']) && !empty($_SERVER['SCRIPT_FILENAME']))
+		{
+			// Warning: If chdir() has been used this will lie!
+			// Warning: This has some problems sometime (CLI can create them easily)
+			$path = str_replace(DIRECTORY_SEPARATOR, '/', dirname($_SERVER['SCRIPT_FILENAME'])) . '/' . $path;
+			$absolute = true;
+			$path_prefix = '';
+		}
+		else
+		{
+			// We have no way of getting the absolute path, just run on using relative ones.
+			$absolute = false;
+			$path_prefix = '.';
+		}
+	}
+
+	// Remove any repeated slashes
+	$path = preg_replace('#/{2,}#', '/', $path);
+
+	// Remove the slashes from the start and end of the path
+	$path = trim($path, '/');
+
+	// Break the string into little bits for us to nibble on
+	$bits = explode('/', $path);
+
+	// Remove any . in the path, renumber array for the loop below
+	$bits = array_values(array_diff($bits, array('.')));
+
+	// Lets get looping, run over and resolve any .. (up directory)
+	for ($i = 0, $max = sizeof($bits); $i < $max; $i++)
+	{
+		// @todo Optimise
+		if ($bits[$i] == '..' )
+		{
+			if (isset($bits[$i - 1]))
+			{
+				if ($bits[$i - 1] != '..')
+				{
+					// We found a .. and we are able to traverse upwards, lets do it!
+					unset($bits[$i]);
+					unset($bits[$i - 1]);
+					$i -= 2;
+					$max -= 2;
+					$bits = array_values($bits);
+				}
+			}
+			else if ($absolute) // ie. !isset($bits[$i - 1]) && $absolute
+			{
+				// We have an absolute path trying to descend above the root of the filesystem
+				// ... Error!
+				return false;
+			}
+		}
+	}
+
+	// Prepend the path prefix
+	array_unshift($bits, $path_prefix);
+
+	$resolved = '';
+
+	$max = sizeof($bits) - 1;
+
+	// Check if we are able to resolve symlinks, Windows cannot.
+	$symlink_resolve = (function_exists('readlink')) ? true : false;
+
+	foreach ($bits as $i => $bit)
+	{
+		if (@is_dir("$resolved/$bit") || ($i == $max && @is_file("$resolved/$bit")))
+		{
+			// Path Exists
+			if ($symlink_resolve && is_link("$resolved/$bit") && ($link = readlink("$resolved/$bit")))
+			{
+				// Resolved a symlink.
+				$resolved = $link . (($i == $max) ? '' : '/');
+				continue;
+			}
+		}
+		else
+		{
+			// Something doesn't exist here!
+			// This is correct realpath() behaviour but sadly open_basedir and safe_mode make this problematic
+			// return false;
+		}
+		$resolved .= $bit . (($i == $max) ? '' : '/');
+	}
+
+	// @todo If the file exists fine and open_basedir only has one path we should be able to prepend it
+	// because we must be inside that basedir, the question is where...
+	// @internal The slash in is_dir() gets around an open_basedir restriction
+	if (!@file_exists($resolved) || (!@is_dir($resolved . '/') && !is_file($resolved)))
+	{
+		return false;
+	}
+
+	// Put the slashes back to the native operating systems slashes
+	$resolved = str_replace('/', DIRECTORY_SEPARATOR, $resolved);
+
+	// Check for DIRECTORY_SEPARATOR at the end (and remove it!)
+	if (substr($resolved, -1) == DIRECTORY_SEPARATOR)
+	{
+		return substr($resolved, 0, -1);
+	}
+
+	return $resolved; // We got here, in the end!
 }
 ?>

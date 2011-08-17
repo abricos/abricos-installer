@@ -370,7 +370,7 @@ legend {
 	font-family: Tahoma,arial,Verdana,Sans-serif;
 	font-size: .9em;
 	font-weight: bold;
-	color: #115098;
+	color: #30909f;
 	margin-top: -.4em;
 	position: relative;
 	text-transform: none;
@@ -391,7 +391,7 @@ legend {
 	margin-right: -7px;
 }
 
-input, textarea {
+select, input, textarea {
 	font-family: Verdana, Helvetica, Arial, sans-serif;
 	font-size: 0.90em;
 	font-weight: normal;
@@ -403,7 +403,6 @@ input, textarea {
 	border-top: 1px solid #AFAEAA;
 	border-right: 1px solid #D5D5C8;
 	border-bottom: 1px solid #D5D5C8;
-	background-color: #E3DFD8;
 }
 
 .rtl input, .rtl textarea {
@@ -413,7 +412,7 @@ input, textarea {
 	border-bottom: 1px solid #D5D5C8;
 }
 
-input:hover, textarea:hover {
+select:hover, input:hover, textarea:hover {
 	border-left: 1px solid #AFAEAA;
 	border-top: 1px solid #AFAEAA;
 	border-right: 1px solid #AFAEAA;
@@ -581,7 +580,7 @@ dt label {
 	font-size: 1.00em;
 	text-align: left;
 	font-weight: bold;
-	color: #4A5A73;
+	color: #40C1D4;
 }
 
 .rtl dt label {
@@ -744,7 +743,7 @@ a.button2, input.button2, .button-no-req {
 	font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
 	color: rgb(165,226,235);
 	font-size: 1.1em;
-	background: rgb(165,226,235) url("../images/bg_button.gif") repeat-x top;
+	background: rgb(165,226,235) url("images/bg_button.gif") repeat-x top;
 	cursor: pointer;
 }
 
@@ -771,11 +770,89 @@ a.button2, a.button2:link, a.button2:visited, a.button2:active, .button-no-req {
 a.button1:hover, input.button1:hover,
 a.button2:hover, input.button2:hover, .button-no-req {
 	border: 1px solid #BC2A4D;
-	background: #EFEFEF url("../images/bg_button.gif") repeat bottom;
+	background: #EFEFEF url("images/bg_button.gif") repeat bottom;
 	color: #BC2A4D;
 }
 
 input.disabled {
 	font-weight: normal;
 	color: #666666;
+}
+/* Action Highlighting
+---------------------------------------- */
+.successbox, .errorbox {
+	padding: 8px;
+	margin: 10px 0;
+	color: #FFFFFF;
+	text-align: center;
+}
+
+.success {
+	color: #228822;
+}
+
+.error {
+	color: #BC2A4D;
+}
+
+.successbox {
+	background-color: #228822;
+}
+
+.errorbox {
+	background-color: #BC2A4D;
+}
+
+* html .errorbox, * html .successbox { height: 1%; } /* Pixel shift fix for IE */
+
+.successbox h3, .errorbox h3 {
+	color: #FFFFFF;
+	margin: 0 0 0.5em;
+	font-size: 1.10em;
+	font-family: "Lucida Grande",Verdana,Helvetica,Arial,sans-serif;
+}
+
+.successbox p, .errorbox p {
+	color: #FFFFFF;
+	font-size: 0.85em;
+	margin-bottom: 0;
+}
+
+.errorbox a:link, .errorbox a:active, .errorbox a:visited,
+.successbox a:link, .successbox a:active, .successbox a:visited {
+	color: #DBD7D1;
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+.errorbox a:hover, .successbox a:hover {
+	color: #FFFFFF;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.notice {
+	background-color: #62A5CC;
+}
+
+/* Special cases for the error page */
+#errorpage #page-header a {
+	font-weight: bold;
+	line-height: 6em;
+}
+
+#errorpage #content {
+	padding-top: 10px;
+}
+
+#errorpage #content h1 {
+	color: #DF075C;
+}
+
+#errorpage #content h2 {
+	margin-top: 20px;
+	margin-bottom: 5px;
+	border-bottom: 1px solid #CCCCCC;
+	padding-bottom: 5px;
+	color: #333333;
 }

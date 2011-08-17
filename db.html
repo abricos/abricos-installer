@@ -11,13 +11,13 @@
 <div id="header">
 	<div id="logo">
 		<h1><a href="http://abricos.org/">Abricos 0.5.3</a></h1>
-		<h2><a href="<? print PATH_INSTALLATION;?>">Installation</a></h2>
+		<h2><a href="<? print 'http://'.$_SERVER[HTTP_HOST].'/install/';?>">Installation</a></h2>
 	</div>
 	<div id="menu">
 		<ul>
-			<li><a href="about.html">О продукте</a></li>
-			<li><a href="license.html">Лицензия</a></li>
-			<li><a href="support.html">Поддержка</a></li>
+			<li><a href="index.php?content=4">О продукте</a></li>
+			<li><a href="index.php?content=5">Лицензия</a></li>
+			<li><a href="index.php?content=6">Поддержка</a></li>
 		</ul>
 	</div>
 	<div id="search">
@@ -29,6 +29,7 @@
 	<div id="content">
 		<div class="post">
 			<div class="entry">
+				<h1 class="title">Конфигурация базы данных</h1>
 				<form id="install_install" method="post" action="<?print $url;?>" onsubmit="submit.disabled = 'disabled';">
 					<?print $cmtg ? '':'<!--';?>
 					<fieldset>
@@ -41,10 +42,9 @@
 					<!-- -->
 					<?print $connect_test ? '<!--':'';?>
 					<fieldset>
-						<legend>Конфигурация базы данных (БД)</legend>
 						<dl>
 							<dt><label for="dbms">Тип базы данных:</label></dt>
-							<dd><select id="dbms" name="dbms"><?print dbms_select($data['dbms']);?></select></dd>
+							<dd><select id="dbms" name="dbms" style="width:168px"><?print dbms_select($data['dbms']);?></select></dd>
 						</dl>
 						<dl>
 							<dt><label for="dbhost">Имя сервера БД или DSN:</label><br><span class="explain">DSN — это имя источника данных и требуется только при установке с использованием ODBC.</span></dt>
