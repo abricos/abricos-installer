@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Abricos 0.5.3 Installation</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+<div id="header">
+	<div id="logo">
+		<h1><a href="http://abricos.org/">Abricos 0.5.3</a></h1>
+		<h2><a href="<? print PATH_INSTALLATION;?>">Installation</a></h2>
+	</div>
+	<div id="menu">
+		<ul>
+			<li><a href="about.html">О продукте</a></li>
+			<li><a href="license.html">Лицензия</a></li>
+			<li><a href="support.html">Поддержка</a></li>
+		</ul>
+	</div>
+	<div id="search">
+	</div>
+</div>
+<!-- start page -->
+<div id="page">
+	<!-- start content -->
+	<div id="content">
+		<div class="post">
+			<div class="entry">
+				<h1 class="title">Программная совместимость</h1>
+				<p>
+					Перед установкой Abricos будут проведены проверки файлов и конфигурации сервера, 
+					чтобы удостовериться в том, что Abricos можно установить и запустить. Внимательно 
+					ознакомьтесь с результатами и не переходите к следующему шагу установки до тех пор, 
+					пока необходимые проверки не будут пройдены.
+				</p>
+				<fieldset class="req">
+					<fieldset>
+						<legend>Версия и настройки PHP</legend>
+						<p>Для установки Abricos <strong>требуется</strong> версия PHP не ниже 5.0.0. Если ниже написано <var>Безопасный режим (Safe mode)</var>, то PHP работает в этом режиме. Это наложит некоторые ограничения на удалённое администрирование и аналогичные функции.</p>
+						<dl>
+							<dt>Версия PHP ≥ 5.0.0:</dt>
+							<dd><?print $php_version_reqd;?></dd>
+						</dl>
+						<dl>
+							<dt>Параметр PHP <var>register_globals</var> отключён:<br /><span class="explain">Abricos будет работать, даже если параметр register_globals включён. Но, по возможности, его рекомендуется отключить из соображений безопасности.</span></dt>
+							<dd><?print $register_globals_reqd;?></dd>
+						</dl>
+						<dl>
+							<dt>Параметр PHP <var>allow_url_fopen</var> включён:<br /><span class="explain"><strong>Необязательно</strong>.  </span></dt>
+							<dd><?print $url_fopen_reqd;?></dd>
+						</dl>
+						<dl>
+							<dt>Функция PHP <var>getimagesize()</var> доступна:<br /><span class="explain"><strong>Необходима</strong>. Для правильной работы Abricos необходимо наличие функции getimagesize.</span></dt>
+							<dd><?print $getimagesize_reqd;?></dd>
+						</dl>
+						<dl>
+							<dt>Поддержка UTF-8 в PCRE:<br /><span class="explain">Abricos <strong>не будет</strong> работать, если PHP собран без поддержки UTF-8 для расширения PCRE.</span></dt>
+							<dd><?print $utf8_support_reqd;?></dd>
+						</dl>
+					</fieldset>
+					<fieldset>
+						<legend>Проверка расширения <samp>mod_rewrite</samp></legend>
+						<p><strong>Необходимо</strong>. <samp>mod_rewrite</samp> — это расширение PHP, предоставляет механизм динамического изменения запрашиваемых URL-ов.</p>
+						<dl>
+							<dt>Поддержка расширения <samp>mod_rewrite</samp><br /></dt>
+							<dd><?print $mod_rewrite_reqd;?></dd>
+						</dl>
+					</fieldset>
+					<fieldset>
+						<legend>Проверка расширения <samp>mbstring</samp></legend>
+						<p><strong>Необходимо</strong>. <samp>mbstring</samp> — это расширение PHP, обеспечивающее работу многобайтных строковых функций. Некоторые возможности mbstring несовместимы с Abricos и должны быть отключены.</p>
+						<dl>
+							<dt>Перегрузка функции:<br /><span class="explain">Значение <var>mbstring.func_overload</var> должно быть установлено в 0 или в 4.</span></dt>
+							<dd><?print $mbstring_reqd[0];?></dd>
+						</dl>
+						<dl>
+							<dt>Прозрачное кодирование символов:<br /><span class="explain">Значение <var>mbstring.encoding_translation</var> должно быть установлено в 0.</span></dt>
+							<dd><?print $mbstring_reqd[1];?></dd>
+						</dl>
+						<dl>
+							<dt>Кодировка входящих символов:<br /><span class="explain">Значение <var>mbstring.http_input</var> должно быть установлено в <samp>pass</samp>.</span></dt>
+							<dd><?print $mbstring_reqd[2];?></dd>
+						</dl>
+						<dl>
+							<dt>Кодировка исходящих символов:<br /><span class="explain">Значение <var>mbstring.http_output</var> должно быть установлено в <samp>pass</samp>.</span></dt>
+							<dd><?print $mbstring_reqd[3];?></dd>
+						</dl>
+					</fieldset>
+					<fieldset>
+						<legend>Поддержка базы данных MySQL</legend>
+						<dl>
+							<dt>Поддержка MySQL:</dt>
+							<dd><?print $mysql_support_reqd[0];?></dd>
+						</dl>
+					</fieldset>
+					<fieldset>
+						<legend>Файлы и папки</legend>
+						<p>Для правильной работы Abricos <strong>необходим</strong> доступ на чтение или запись определённых файлов и папок. Если вы увидите надпись «Не найден», то необходимо создать соответствующий файл или папку. А если увидите надпись «Нет прав на запись», то необходимо изменить права на файл или на папку, чтобы разрешить Abricos запись в них.</p>
+						<dl>
+							<dt>cache/:</dt>
+							<dd><?print $cache_reqd;?></dd>
+						</dl>
+						<dl>
+							<dt>config.php:</dt>
+							<dd><?print $config_reqd;?></dd>
+						</dl>
+						<dl>
+							<dt>.htaccess:</dt>
+							<dd><?print $htaccess_reqd;?></dd>
+						</dl>
+					</fieldset>
+					<fieldset>
+						<legend>Необязательные модули</legend>
+						<p>Эти модули и приложения <strong>не являются обязательными</strong>. Тем не менее они предоставляют расширенные возможности будущей конференции.</p>
+						<dl>
+							<dt>Поддержка сжатия zlib [ gz, .tar.gz, .zip ]:</dt>
+							<dd><?print $other_modules_reqd[0];?></dd>
+						</dl>
+						<dl>
+							<dt>Поддержка удалённого FTP [ установка ]:</dt>
+							<dd><?print $other_modules_reqd[1];?></dd>
+						</dl>
+						<dl>
+							<dt>Поддержка графической библиотеки GD [ визуальное подтверждение ]:</dt>
+							<dd><?print $other_modules_reqd[2];?></dd>
+						</dl>
+						<dl>
+							<dt>Поддержка XML [ Jabber ]:</dt>
+							<dd><?print $other_modules_reqd[3];?></dd>
+						</dl>
+						<dl>
+							<dt>Поддержка Imagemagick [ вложения ]:</dt>
+							<dd><?print $other_modules_reqd[4];?></dd>
+						</dl>
+					</fieldset>
+				</fieldset>
+				</fieldset>
+				<fieldset class="submit-buttons">
+					<legend>Следующий шаг</legend>
+					<a class="<?print (!in_array(false, $passed)) ? 'button1' : 'button-no-req';?>" href="<?print $url;?>"><?print $not_passed;?></a>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+	<!-- end content -->
+	<!-- start sidebar -->
+	<div id="sidebar">
+		<ul>
+			<li>
+				<h2>Этапы установки</h2>
+				<ul>
+					<li><strong style="color:orange">Требования</strong></li>
+					<li><a href="index.php?content=2">Настройка базы данных</a></li>
+					<li><a href="#">Файл конфигурации</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<!-- end sidebar -->
+</div>
+<!-- end page -->
+<div id="footer">
+	<p class="legal">&copy;2011 Все права защищены.</p>
+	<p class="credits">Работает на <a href="http://abricos.org/">Abricos</a>.</p>
+</div>
+</body>
+</html>
