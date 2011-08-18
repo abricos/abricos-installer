@@ -32,12 +32,15 @@
 				<h1 class="title">Конфигурация базы данных</h1>
 				<form id="install_install" method="post" action="<?print $url;?>" onsubmit="submit.disabled = 'disabled';">
 					<?print $cmtg ? '':'<!--';?>
+					<br />
 					<fieldset>
-						<legend>Подключение к базе данных</legend>
+						<!-- <legend>Подключение к базе данных</legend> -->
+						<br />
 						<dl>
 							<dt>Проверка подключения:</dt>
 							<dd><?print $connect_success;?></dd>
 						</dl>
+						<br />
 					</fieldset>
 					<!-- -->
 					<?print $connect_test ? '<!--':'';?>
