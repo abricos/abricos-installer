@@ -43,8 +43,8 @@
 						<br />
 					</fieldset>
 					<!-- -->
-					<?print $connect_test ? '<!--':'';?>
-					<fieldset>
+					
+					<fieldset style="display: <?print $connect_test ? 'none' : ''; ?>">
 						<dl>
 							<dt><label for="dbms">Тип базы данных:</label></dt>
 							<dd><select id="dbms" name="dbms" style="width:168px"><?print dbms_select($data['dbms']);?></select></dd>

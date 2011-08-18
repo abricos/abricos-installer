@@ -9,6 +9,11 @@ Released for free under a Creative Commons Attribution 2.5 License
 	padding: 0;
 }
 
+.clear {
+	clear: both;
+}
+
+
 body {
 	color: #40C1D4;
 	padding-top: 0;
@@ -339,6 +344,7 @@ a:hover {
 
 /* General form styles
 ----------------------------------------*/
+div.req ,
 fieldset {
 	margin: 15px 0;
 	padding: 10px;

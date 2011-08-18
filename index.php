@@ -52,7 +52,7 @@ if($_GET['content']){
     case 4: include('about.html'); break;
     case 5: include('license.html'); break;
     case 6: include('support.html'); break;
-    case 7: error('Удалите папку install !!!','71','index.php'); break;
+    case 7: error('Удалите папку install!','71','index.php'); break;
   }
 }else include('about.html');
 
@@ -110,31 +110,17 @@ function get_requirements (){
 	}
 	$utf8_support_reqd = $result;
 //Check for .htaccess
-	$write = $exists = true;
-	if (file_exists(PATH_ROOT.DS . '.htaccess')){
-		if (!u_is_writable(PATH_ROOT.DS . '.htaccess')){
-			$write = false;
-		}
-	}else if (file_exists(PATH_ROOT.DS . 'def.htaccess')){
-		rename (PATH_ROOT.DS . 'def.htaccess', PATH_ROOT.DS . '.htaccess');
-		if (!u_is_writable(PATH_ROOT.DS . '.htaccess')){
-			$write = false;
-		}
-	}else{
-		$write = $exists = false;
-	}
-	$passed['files'] = ($exists && $write && $passed['files']) ? true : false;
-	$exists_str = ($exists) ? '<strong style="color:green">' . 'Найден' . '</strong>' : '<strong style="color:red">' . 'Не найден' . '</strong>';
-	$write_str = ($write) ? ', <strong style="color:green">' . 'допускает запись' . '</strong>' : (($exists) ? ', <strong style="color:red">' . 'не допускает запись' . '</strong>' : '');
-	$htaccess_reqd = $exists ? $exists_str . $write_str : $exists_str;
+	$exists = file_exists(PATH_ROOT.DS . '.htaccess');
+	$passed['files'] = $exists;
+	$htaccess_reqd = ($exists) ? '<strong style="color:green">' . 'Найден' . '</strong>' : '<strong style="color:red">' . 'Не найден, необходимо переименовать файл "def.htaccess" в файл ".htaccess"' . '</strong>';
 
 //Check for  mod_rewrite
 	$passed['mod_rewrite'] = true;
 	$host = $_SERVER['HTTP_HOST'] ? $_SERVER['HTTP_HOST'] : $_ENV['HTTP_HOST'];
-	$url = "http://".$host.DS."__on_mod_rewrite";
+	$url = "http://".$host.DS."__on_mod_rewrite/";
 	$ok = @file_get_contents($url);
 	if (!in_array('mod_rewrite', apache_get_modules()) || $ok != "ok"){
-		$mod_rewrite_reqd = '<strong style="color:red">' . 'Недоступно' . '</strong>';
+		$mod_rewrite_reqd = '<strong style="color:red">' . 'Недоступно.' . '</strong>';
 		$passed['mod_rewrite'] = false;
 	} else $mod_rewrite_reqd = '<strong style="color:green">' . 'Доступно' . '</strong>';
 /**
@@ -230,8 +216,7 @@ function get_requirements (){
 		$img_imagick = str_replace('\\', '/', $magic_home);
 	}
 	$other_modules_reqd[] = ($img_imagick) ? '<strong style="color:green">' . 'Доступно' . ', ' . $img_imagick . '</strong>' : 
-	'<strong style="color:blue">' . 'Не удалось найти приложение. Если вы знаете, что Imagemagick установлен, то вы можете 
-	указать путь к нему после установки конференции в администраторском разделе.' . '</strong>'; 
+	'<strong style="color:blue">' . 'Не удалось найти приложение.' . '</strong>'; 
 // Check permissions on files/directories we need access to
 	umask(0);
 	$passed['files'] = true;
@@ -249,9 +234,7 @@ function get_requirements (){
 	}
 // Now check if it is writable by storing a simple file
 	$fp = @fopen(PATH_ROOT.DS . 'cache/' . 'test_lock', 'wb');
-	if ($fp !== false){
-		$write = true;
-	}
+	$write = $fp !== false;
 	@fclose($fp);
 	@unlink(PATH_ROOT.DS . 'cache/' . 'test_lock');
 	$passed['files'] = ($exists && $write && $passed['files']) ? true : false;
@@ -261,19 +244,11 @@ function get_requirements (){
 
 	
 //Check for config.php
-	$write = $exists = true;
-	if (file_exists(PATH_ROOT.DS . 'includes/config.new.php')){
-		rename (PATH_ROOT.DS . 'includes/config.new.php', PATH_ROOT.DS . 'includes/config.php');
-		if (!u_is_writable(PATH_ROOT.DS . 'includes/config.php')){
-			$write = false;
-		}
-		rename (PATH_ROOT.DS . 'includes/config.php', PATH_ROOT.DS . 'includes/config.new.php');
-	}
-	else{
-		$write = $exists = false;
-	}
-	$passed['files'] = ($exists && $write && $passed['files']) ? true : false;
-	$exists_str = ($exists) ? '<strong style="color:green">' . 'Найден' . '</strong>' : '<strong style="color:red">' . 'Не найден' . '</strong>';
+	$exists = file_exists(PATH_ROOT.DS . 'includes/config.php');
+	$write = u_is_writable(PATH_ROOT.DS . 'includes/config.php');
+	$passed['files'] = $exists && $write && $passed['files'];
+	
+	$exists_str = $exists ? '<strong style="color:green">' . 'Найден' . '</strong>' : '<strong style="color:red">' . 'Не найден, создайте пустой файл "config.php" и установите его права на запись' . '</strong>';
 	$write_str = ($write) ? ', <strong style="color:green">' . 'допускает запись' . '</strong>' : (($exists) ? ', <strong style="color:red">' . 'не допускает запись' . '</strong>' : '');
 	$config_reqd = $exists ? $exists_str . $write_str : $exists_str;
 	$url = (!in_array(false, $passed)) ? 'index.php?content=2' : 'index.php?content=1';
@@ -1387,8 +1362,8 @@ function error($error, $line, $file, $skip = false){
 	echo '			<span class="corners-top"><span></span></span>';
 	echo '			<div id="content">';
 	echo '				<h1>Критическая ошибка при установке</h1>';
-	echo '		<p>Критическая ошибка при установке</p><br />';
-	echo '		<p>' . basename($file) . ' [ ' . $line . ' ]</p><br />';
+	// echo '		<p>Критическая ошибка при установке</p><br />';
+	// echo '		<p>' . basename($file) . ' [ ' . $line . ' ]</p><br />';
 	echo '		<p><b>' . $error . '</b></p><bк />';
 	echo '			</div>';
 	echo '			<span class="corners-bottom"><span></span></span>';

@@ -31,12 +31,12 @@
 			<div class="entry">
 				<h1 class="title">Программная совместимость</h1>
 				<p>
-					Перед установкой Abricos будут проведены проверки файлов и конфигурации сервера, 
+					Перед установкой платформы будут проведены проверки файлов и конфигурации сервера, 
 					чтобы удостовериться в том, что Abricos можно установить и запустить. Внимательно 
 					ознакомьтесь с результатами и не переходите к следующему шагу установки до тех пор, 
 					пока необходимые проверки не будут пройдены.
 				</p>
-				<fieldset class="req">
+				<div class="req">
 					<fieldset>
 						<legend>Версия и настройки PHP</legend>
 						<p>Для установки Abricos <strong>требуется</strong> версия PHP не ниже 5.0.0. Если ниже написано <var>Безопасный режим (Safe mode)</var>, то PHP работает в этом режиме. Это наложит некоторые ограничения на удалённое администрирование и аналогичные функции.</p>
@@ -114,7 +114,7 @@
 					</fieldset>
 					<fieldset>
 						<legend>Необязательные модули</legend>
-						<p>Эти модули и приложения <strong>не являются обязательными</strong>. Тем не менее они предоставляют расширенные возможности будущей конференции.</p>
+						<p>Эти модули и приложения <strong>не являются обязательными</strong>. Тем не менее они предоставляют расширенные возможности.</p>
 						<dl>
 							<dt>Поддержка сжатия zlib [ gz, .tar.gz, .zip ]:</dt>
 							<dd><?print $other_modules_reqd[0];?></dd>
@@ -136,11 +136,10 @@
 							<dd><?print $other_modules_reqd[4];?></dd>
 						</dl>
 					</fieldset>
-				</fieldset>
-				</fieldset>
+				</div>
 				<fieldset class="submit-buttons">
 					<legend>Следующий шаг</legend>
-					<a class="<?print (!in_array(false, $passed)) ? 'button1' : 'button-no-req';?>" href="<?print $url;?>"><?print $not_passed;?></a>
+					<a class="<? print (!in_array(false, $passed)) ? 'button1' : 'button-no-req';?>" href="<?print $url;?>"><?print $not_passed;?></a>
 				</fieldset>
 			</div>
 		</div>
