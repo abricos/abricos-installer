@@ -62,11 +62,10 @@
 						</dl>
 					</fieldset>
 					<fieldset>
-						<legend>Проверка расширения <samp>mod_rewrite</samp></legend>
-						<p><strong>Необходимо</strong>. <samp>mod_rewrite</samp> — это расширение PHP, предоставляет механизм динамического изменения запрашиваемых URL-ов.</p>
+						<legend>Поддержка базы данных MySQL</legend>
 						<dl>
-							<dt>Поддержка расширения <samp>mod_rewrite</samp><br /></dt>
-							<dd><?print $mod_rewrite_reqd;?></dd>
+							<dt>Поддержка MySQL:</dt>
+							<dd><?print $mysql_support_reqd[0];?></dd>
 						</dl>
 					</fieldset>
 					<fieldset>
@@ -90,10 +89,11 @@
 						</dl>
 					</fieldset>
 					<fieldset>
-						<legend>Поддержка базы данных MySQL</legend>
+						<legend>Проверка расширения <samp>mod_rewrite</samp></legend>
+						<p><strong>Необходимо</strong>. <samp>mod_rewrite</samp> — это расширение PHP, предоставляет механизм динамического изменения запрашиваемых URL-ов.</p>
 						<dl>
-							<dt>Поддержка MySQL:</dt>
-							<dd><?print $mysql_support_reqd[0];?></dd>
+							<dt>Поддержка расширения <samp>mod_rewrite</samp><br /></dt>
+							<dd><?print $mod_rewrite_reqd;?></dd>
 						</dl>
 					</fieldset>
 					<fieldset>

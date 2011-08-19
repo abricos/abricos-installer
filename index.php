@@ -120,7 +120,7 @@ function get_requirements (){
 	$url = "http://".$host.DS."__on_mod_rewrite/";
 	$ok = @file_get_contents($url);
 	if (!in_array('mod_rewrite', apache_get_modules()) || $ok != "ok"){
-		$mod_rewrite_reqd = '<strong style="color:red">' . 'Недоступно.' . '</strong>';
+		$mod_rewrite_reqd = '<strong style="color:red">' . 'Недоступно. Проверьте наличие файла ".htaccess".' . '</strong>';
 		$passed['mod_rewrite'] = false;
 	} else $mod_rewrite_reqd = '<strong style="color:green">' . 'Доступно' . '</strong>';
 /**
