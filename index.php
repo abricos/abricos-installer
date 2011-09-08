@@ -248,7 +248,7 @@ function get_requirements (){
 	$write = u_is_writable(PATH_ROOT.DS . 'includes/config.php');
 	$passed['files'] = $exists && $write && $passed['files'];
 	
-	$exists_str = $exists ? '<strong style="color:green">' . 'Найден' . '</strong>' : '<strong style="color:red">' . 'Не найден, создайте пустой файл "config.php" и установите его права на запись' . '</strong>';
+	$exists_str = $exists ? '<strong style="color:green">' . 'Найден' . '</strong>' : '<strong style="color:red">' . 'Не найден, создайте пустой файл "includes/config.php" и установите его права на запись' . '</strong>';
 	$write_str = ($write) ? ', <strong style="color:green">' . 'допускает запись' . '</strong>' : (($exists) ? ', <strong style="color:red">' . 'не допускает запись' . '</strong>' : '');
 	$config_reqd = $exists ? $exists_str . $write_str : $exists_str;
 	$url = (!in_array(false, $passed)) ? 'index.php?content=2' : 'index.php?content=1';
