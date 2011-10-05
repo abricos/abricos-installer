@@ -41,6 +41,13 @@ $admin_config_options = array(
 
 $php_dlls_other = array('zlib', 'ftp', 'gd', 'xml');
 
+header("Content-Type: text/html; charset=utf-8");
+header("Expires: Mon, 26 Jul 2005 15:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
 if($_GET['content']){
   $pg = (int)$_GET['content'];
   switch($pg){

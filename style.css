@@ -749,7 +749,7 @@ a.button2, input.button2, .button-no-req {
 	font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
 	color: rgb(165,226,235);
 	font-size: 1.1em;
-	background: rgb(165,226,235) url("images/bg_button.gif") repeat-x top;
+	background-color: rgb(165,226,235);
 	cursor: pointer;
 }
 
@@ -776,7 +776,7 @@ a.button2, a.button2:link, a.button2:visited, a.button2:active, .button-no-req {
 a.button1:hover, input.button1:hover,
 a.button2:hover, input.button2:hover, .button-no-req {
 	border: 1px solid #BC2A4D;
-	background: #EFEFEF url("images/bg_button.gif") repeat bottom;
+	background-color: #EFEFEF;
 	color: #BC2A4D;
 }
 

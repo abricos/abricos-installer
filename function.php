@@ -7,7 +7,6 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
 */
 
-
 /**
 * Checks that the server we are installing on meets the requirements for running Abricos
 */
@@ -1363,6 +1362,8 @@ else
 	*/
 	function u_realpath($path)
 	{
+		return realpath($path);
+		/*
 		$realpath = realpath($path);
 
 		// Strangely there are provider not disabling realpath but returning strange values. :o
@@ -1379,6 +1380,7 @@ else
 		}
 
 		return $realpath;
+		/**/
 	}
 }
 function u_own_realpath($path)
