@@ -90,14 +90,6 @@
 						</dl>
 					</fieldset>
 					<fieldset>
-						<legend>Проверка расширения <samp>mod_rewrite</samp></legend>
-						<p><strong>Необходимо</strong>. <samp>mod_rewrite</samp> — это расширение PHP, предоставляет механизм динамического изменения запрашиваемых URL-ов.</p>
-						<dl>
-							<dt>Поддержка расширения <samp>mod_rewrite</samp><br /></dt>
-							<dd><?print $mod_rewrite_reqd;?></dd>
-						</dl>
-					</fieldset>
-					<fieldset>
 						<legend>Файлы и папки</legend>
 						<p>Для правильной работы Abricos <strong>необходим</strong> доступ на чтение или запись определённых файлов и папок. Если вы увидите надпись «Не найден», то необходимо создать соответствующий файл или папку. А если увидите надпись «Нет прав на запись», то необходимо изменить права на файл или на папку, чтобы разрешить Abricos запись в них.</p>
 						<dl>
@@ -111,6 +103,14 @@
 						<dl>
 							<dt>.htaccess:</dt>
 							<dd><?print $htaccess_reqd;?></dd>
+						</dl>
+					</fieldset>
+					<fieldset>
+						<legend>Проверка расширения <samp>mod_rewrite</samp></legend>
+						<p><strong>Необходимо</strong>. <samp>mod_rewrite</samp> — это расширение PHP, предоставляет механизм динамического изменения запрашиваемых URL-ов.</p>
+						<dl>
+							<dt>Поддержка расширения <samp>mod_rewrite</samp><br /></dt>
+							<dd><?print $mod_rewrite_reqd;?></dd>
 						</dl>
 					</fieldset>
 					<fieldset>
