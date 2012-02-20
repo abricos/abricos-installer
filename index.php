@@ -7,6 +7,8 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
 */
 
+error_reporting(E_ERROR);
+
 define('DS', DIRECTORY_SEPARATOR );
 define('PATH_INSTALLATION',	dirname(__FILE__) );
 define('IN_ABRICOS',	true);
