@@ -48,7 +48,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
-if($_GET['content']){
+if(!empty($_GET['content'])){
   $pg = (int)$_GET['content'];
   switch($pg){
     case 1: get_requirements(); break;
