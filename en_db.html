@@ -1,0 +1,82 @@
+<?php require_once 'tt/en_header.html'; ?>
+
+<!-- start content -->
+<div id="content">
+	<div class="post">
+		<div class="entry">
+			<h1 class="title">Database Setting</h1>
+			<form id="install_install" method="post" action="<?php print $url;?>" onsubmit="submit.disabled = 'disabled';">
+				<?php print $cmtg ? '':'<!--';?>
+				<br />
+				<fieldset>
+					<dl>
+						<dt>Checking the connection:</dt>
+						<dd><?php print $connect_success;?></dd>
+					</dl>
+					<br />
+				</fieldset>
+				<!-- -->
+				
+				<fieldset style="display: <?php print $connect_test ? 'none' : ''; ?>">
+					<dl>
+						<dt><label for="dbms">Database type:</label></dt>
+						<dd><select id="dbms" name="dbms" style="width:168px"><?php print dbms_select($data['dbms']);?></select></dd>
+					</dl>
+					<dl>
+						<dt>
+							<label for="dbhost">Server Name:</label><br />
+							<span class="explain">Example: localhost</span>
+						</dt>
+						<dd><input id="dbhost" type="text" size="25" maxlength="100" name="dbhost" value="<?php print $data['dbhost'];?>"></dd>
+					</dl>
+					<dl>
+						<dt>
+							<label for="dbport">Server Port:</label><br />
+							<span class="explain">Leave blank if the server uses the default port</span>
+						</dt>
+						<dd><input id="dbport" type="text" size="25" maxlength="100" name="dbport" value="<?php print $data['dbport'];?>"></dd>
+					</dl>
+					<dl>
+						<dt><label for="dbname">Database Name:</label></dt>
+						<dd><input id="dbname" type="text" size="25" maxlength="100" name="dbname" value="<?php print $data['dbname'];?>"></dd>
+					</dl>
+					<dl>
+						<dt><label for="dbuser">Database Username:</label></dt>
+						<dd><input id="dbuser" type="text" size="25" maxlength="100" name="dbuser" value="<?php print $data['dbuser'];?>"></dd>
+					</dl>
+					<dl>
+						<dt><label for="dbpasswd">Database Password:</label></dt>
+						<dd><input id="dbpasswd" type="password" size="25" maxlength="100" name="dbpasswd" value=""></dd>
+					</dl>
+					<dl>
+						<dt><label for="table_prefix">Prefix for tables in the database:</label></dt>
+						<dd><input id="table_prefix" type="text" size="25" maxlength="100" name="table_prefix" value="<?php print $data['table_prefix'];?>"></dd>
+					</dl>
+				</fieldset>
+				<!--  -->
+				<fieldset class="submit-buttons">
+					<legend>Next Step</legend>
+					<?php print $s_hidden_fields;?>
+					<input class="button1" type="submit" id="submit" onclick="this.className = 'button1 disabled';" name="submit" value="Next Step">
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- end content -->
+<!-- start sidebar -->
+<div id="sidebar">
+	<ul>
+		<li>
+			<h2>Installation Steps</h2>
+			<ul>
+				<li><a href="index.php?lang=ru&content=1">Requirements</a></li>
+				<li><strong style="color:orange">Database Setting</strong></li>
+				<li><a href="#">Configuration File</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<!-- end sidebar -->
+
+<?php require_once 'tt/en_footer.html'; ?>

@@ -1,0 +1,82 @@
+<?php require_once 'tt/ru_header.html'; ?>
+
+<!-- start content -->
+<div id="content">
+	<div class="post">
+		<div class="entry">
+			<h1 class="title">Конфигурация базы данных</h1>
+			<form id="install_install" method="post" action="<?php print $url;?>" onsubmit="submit.disabled = 'disabled';">
+				<?php print $cmtg ? '':'<!--';?>
+				<br />
+				<fieldset>
+					<dl>
+						<dt>Проверка подключения:</dt>
+						<dd><?php print $connect_success;?></dd>
+					</dl>
+					<br />
+				</fieldset>
+				<!-- -->
+				
+				<fieldset style="display: <?php print $connect_test ? 'none' : ''; ?>">
+					<dl>
+						<dt><label for="dbms">Тип базы данных:</label></dt>
+						<dd><select id="dbms" name="dbms" style="width:168px"><?php print dbms_select($data['dbms']);?></select></dd>
+					</dl>
+					<dl>
+						<dt>
+							<label for="dbhost">Имя сервера БД:</label><br />
+							<span class="explain">Например: localhost</span>
+						</dt>
+						<dd><input id="dbhost" type="text" size="25" maxlength="100" name="dbhost" value="<?php print $data['dbhost'];?>"></dd>
+					</dl>
+					<dl>
+						<dt>
+							<label for="dbport">Порт сервера БД:</label><br />
+							<span class="explain">Оставьте поле пустым, если сервер использует порт по умолчанию.</span>
+						</dt>
+						<dd><input id="dbport" type="text" size="25" maxlength="100" name="dbport" value="<?php print $data['dbport'];?>"></dd>
+					</dl>
+					<dl>
+						<dt><label for="dbname">Название базы данных:</label></dt>
+						<dd><input id="dbname" type="text" size="25" maxlength="100" name="dbname" value="<?php print $data['dbname'];?>"></dd>
+					</dl>
+					<dl>
+						<dt><label for="dbuser">Имя пользователя БД:</label></dt>
+						<dd><input id="dbuser" type="text" size="25" maxlength="100" name="dbuser" value="<?php print $data['dbuser'];?>"></dd>
+					</dl>
+					<dl>
+						<dt><label for="dbpasswd">Пароль к БД:</label></dt>
+						<dd><input id="dbpasswd" type="password" size="25" maxlength="100" name="dbpasswd" value=""></dd>
+					</dl>
+					<dl>
+						<dt><label for="table_prefix">Префикс для таблиц в базе данных:</label></dt>
+						<dd><input id="table_prefix" type="text" size="25" maxlength="100" name="table_prefix" value="<?php print $data['table_prefix'];?>"></dd>
+					</dl>
+				</fieldset>
+				<!--  -->
+				<fieldset class="submit-buttons">
+					<legend>Следующий шаг</legend>
+					<?php print $s_hidden_fields;?>
+					<input class="button1" type="submit" id="submit" onclick="this.className = 'button1 disabled';" name="submit" value="Следующий шаг">
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- end content -->
+<!-- start sidebar -->
+<div id="sidebar">
+	<ul>
+		<li>
+			<h2>Этапы установки</h2>
+			<ul>
+				<li><a href="index.php?lang=ru&content=1">Требования</a></li>
+				<li><strong style="color:orange">Настройка базы данных</strong></li>
+				<li><a href="#">Файл конфигурации</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<!-- end sidebar -->
+
+<?php require_once 'tt/ru_footer.html'; ?>

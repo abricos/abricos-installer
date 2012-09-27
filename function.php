@@ -2,68 +2,95 @@
 /**
 * @version $Id$
 * @package Abricos
-* @copyright Copyright (C) 2011 Abricos. All rights reserved.
 * @link http://abricos.org
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
 */
+
+$PH = array(
+	'ru' => array(
+		'yes' => 'Да',
+		'no' => 'Нет',
+		'avail' => 'Доступно',
+		'notavail' => 'Недоступно',
+		'ht_found' => 'Найден',
+		'ht_notfound' => 'Не найден, необходимо переименовать файл "def.htaccess" в файл ".htaccess"',
+		'mrw_avail' => 'Доступно',
+		'mrw_notavail' => 'Недоступно. Проверьте наличие файла ".htaccess"',
+		'f_found' => 'Найден',
+		'f_write' => 'допускает запись',
+		'f_nfound' => 'Не найден',
+		'f_nwrite' => 'не допускает запись',
+		'f_nfoundcfg' => 'Не найден, создайте пустой файл "includes/config.php" и установите его права на запись',
+
+		'btn_next' => 'Следующий шаг',
+		'btn_notreq' => 'Требования не выполнены! Перепроверить?',
+			
+		'db_nomysql' => 'Не удалось загрузить модуль PHP для выбранного типа базы данных',
+		'db_connok' => 'Успешное подключение',
+		'db_notname' => 'Не указано название базы данных',
+		'db_erprefix' => 'Указанный префикс недопустим для вашей базы данных. Введите другой префикс без специальных символов типа дефиса',
+		'db_erprefixlen' => 'Указанный префикс таблиц слишком длинный. Длина префикса не должна превышать %d символов.',
+		'db_errtext' => 'Не удалось подключиться к базе данных. Ниже показан текст сообщения об ошибке:',
+		'db_noterr' => 'Нет сообщения об ошибке',
+		'db_errprefixex' => 'Таблицы с указанным префиксом уже существуют. Введите другой префикс.',
+		
+		'cfg_ok' => 'Конфигурационный файл записан. Установка завершена. Для продолжения удалите папку install и нажмите Готово.',
+		'cfg_err' => 'Не удалось записать конфигурационный файл. Обратитесь в службу поддержки <br />В папке includes/ есть файлы конфигурации config.new.php и config.newwebos.php. При необходимости переименуйте один из них в config.php.'
+	),
+	'en' => array(
+		'yes' => 'Yes',
+		'no' => 'No',
+		'avail' => 'Available',
+		'notavail' => 'Not Available',
+		'ht_found' => 'Found',
+		'ht_notfound' => 'Not Found, rename the file "def.htaccess" to the file ".htaccess"',
+		'mrw_avail' => 'Available',
+		'mrw_notavail' => 'Not Available. Check the file ".htaccess"',
+		'f_found' => 'Found',
+		'f_write' => 'can be written',
+		'f_nfound' => 'Not Found',
+		'f_nwrite' => 'not be written',
+		'f_nfoundcfg' => 'Not Found, create empty file "includes/config.php" and set it writable (chmod 777)',
+		
+		'btn_next' => 'Next Step',
+		'btn_notreq' => 'Requirements are not met! Double-check?',
+
+		'db_nomysql' => 'Failed to load the PHP module for the type of database',
+		'db_connok' => 'Successful connection',
+		'db_notname' => 'Do not include the name of the database',
+		'db_erprefix' => 'This prefix is not valid for your database. Enter another prefix without special characters such as hyphens',
+		'db_erprefixlen' => 'This prefix table is too long. The prefix length must not exceed %d characters.',
+		'db_errtext' => 'Unable to connect to database. The following is an error message:',
+		'db_noterr' => 'No error message',
+		'db_errprefixex' => 'Tables with the specified prefix already exist. Enter a different prefix.',
+		
+		'cfg_ok' => 'The configuration file is written. Installation is complete. <br />To continue, remove the install folder and click Finish.',
+		'cfg_err' => 'Can not write configuration file. Contact your support <br /> The folder /config includes files have config.new.php. If necessary, rename one of them in config.php.'
+	)
+);
 
 /**
 * Checks that the server we are installing on meets the requirements for running Abricos
 */
 function get_requirements (){
-	global $php_dlls_other;
-	/**
-	* Specific PHP modules we may require for certain optional or extended features
-	*/
+	global $LANG, $PH;
+
 // Test the minimum PHP version
 	$php_version = PHP_VERSION;
 	if (version_compare($php_version, '5.0.0') < 0){
-		$result = '<strong style="color:red">' . 'НЕТ' . '</strong>';
+		$result = '<strong style="color:red">' . $PH[$LANG]['no'] . '</strong>';
 	}else{
 		$passed['php'] = true;
 
 		// We also give feedback on whether we're running in safe mode
-		$result = '<strong style="color:green">' . 'Да';
-		if (@ini_get('safe_mode') == '1' || strtolower(@ini_get('safe_mode')) == 'on'){
-			$result .= ', ' . 'Безопасный режим';
-		}
-		$result .= '</strong>';
+		$result = '<strong style="color:green">' . $PH[$LANG]['yes'] . '</strong>';
 	}
 	$php_version_reqd = $result;
-// Check for register_globals being enabled
-	if (@ini_get('register_globals') == '1' || strtolower(@ini_get('register_globals')) == 'on'){
-		$result = '<strong style="color:red">' . 'Нет' . '</strong>';
-	}else{
-		$result = '<strong style="color:green">' . 'Да' . '</strong>';
-	}
-	$register_globals_reqd = $result;
-// Check for url_fopen
-	if (@ini_get('allow_url_fopen') == '1' || strtolower(@ini_get('allow_url_fopen')) == 'on'){
-		$result = '<strong style="color:green">' . 'Да' . '</strong>';
-	}else{
-		$result = '<strong style="color:red">' . 'Нет' . '</strong>';
-	}
-	$url_fopen_reqd = $result;
-// Check for getimagesize
-	if (@function_exists('getimagesize')){
-		$passed['imagesize'] = true;
-		$result = '<strong style="color:green">' . 'Да' . '</strong>';
-	}else{
-		$result = '<strong style="color:red">' . 'Нет' . '</strong>';
-	}
-	$getimagesize_reqd = $result;
-// Check for PCRE UTF-8 support
-	if (@preg_match('//u', '')){
-		$passed['pcre'] = true;
-		$result = '<strong style="color:green">' . 'Да' . '</strong>';
-	}else{
-		$result = '<strong style="color:red">' . 'Нет' . '</strong>';
-	}
-	$utf8_support_reqd = $result;
+	
 //Check for .htaccess
 	$exists = file_exists(PATH_ROOT.DS . '.htaccess');
 	$passed['files'] = $exists;
-	$htaccess_reqd = ($exists) ? '<strong style="color:green">' . 'Найден' . '</strong>' : '<strong style="color:red">' . 'Не найден, необходимо переименовать файл "def.htaccess" в файл ".htaccess"' . '</strong>';
+	$htaccess_reqd = ($exists) ? '<strong style="color:green">' . $PH[$LANG]['ht_found'] . '</strong>' : '<strong style="color:red">' . $PH[$LANG]['ht_notfound'] . '</strong>';
 
 //Check for  mod_rewrite
 	$passed['mod_rewrite'] = true;
@@ -71,55 +98,11 @@ function get_requirements (){
 	$url = str_replace("\\", "/", "http://".$host.DS."__on_mod_rewrite/");
 	$ok = @file_get_contents($url);
 	if (!in_array('mod_rewrite', apache_get_modules()) || $ok != "ok"){
-		$mod_rewrite_reqd = '<strong style="color:red">' . 'Недоступно. Проверьте наличие файла ".htaccess".' . '</strong>';
+		$mod_rewrite_reqd = '<strong style="color:red">' . $PH[$LANG]['mrw_notavail'] . '</strong>';
 		$passed['mod_rewrite'] = false;
-	} else $mod_rewrite_reqd = '<strong style="color:green">' . 'Доступно' . '</strong>';
-/**
-*		Better not enabling and adding to the loaded extensions due to the specific requirements needed
-		if (!@extension_loaded('mbstring')){
-			can_load_dll('mbstring');
-		}
-*/
-	$passed['mbstring'] = true;
-	if (@extension_loaded('mbstring')){
-// Test for available database modules
-		$checks = array(
-			array('func_overload', '&', MB_OVERLOAD_MAIL|MB_OVERLOAD_STRING),
-			array('encoding_translation', '!=', 0),
-			array('http_input', '!=', 'pass'),
-			array('http_output', '!=', 'pass')
-		);
-		$mbstring_reqd = array();
-		foreach ($checks as $mb_checks){
-			$ini_val = @ini_get('mbstring.' . $mb_checks[0]);
-			switch ($mb_checks[1]){
-				case '&':
-					if (intval($ini_val) & $mb_checks[2])
-					{
-						$result = '<strong style="color:red">' . 'Нет' . '</strong>';
-						$passed['mbstring'] = false;
-					}
-					else
-					{
-						$result = '<strong style="color:green">' . 'Да' . '</strong>';
-					}
-				break;
-
-				case '!=':
-					if ($ini_val != $mb_checks[2])
-					{
-						$result = '<strong style="color:red">' . 'Нет' . '</strong>';
-						$passed['mbstring'] = false;
-					}
-					else
-					{
-						$result = '<strong style="color:green">' . 'Да' . '</strong>';
-					}
-				break;
-			}
-			$mbstring_reqd[] = $result;
-		}
-	}
+	} else 
+		$mod_rewrite_reqd = '<strong style="color:green">' . $PH[$LANG]['mrw_avail'] . '</strong>';
+	
 // Test for available database modules
 	$available_dbms = get_available_dbms(false, true);
 	$passed['db'] = $available_dbms['ANY_DB_SUPPORT'];
@@ -127,47 +110,12 @@ function get_requirements (){
 	$mysql_support_reqd = array();
 	foreach ($available_dbms as $db_name => $db_ary){
 		if (!$db_ary['AVAILABLE']){
-			$mysql_support_reqd[] = '<span style="color:red">' . 'Недоступно' . '</span>';
+			$mysql_support_reqd[] = '<span style="color:red">' . $PH[$LANG]['notavail'] . '</span>';
 		}else{
-			$mysql_support_reqd[] = '<strong style="color:green">' . 'Доступно' . '</strong>';
+			$mysql_support_reqd[] = '<strong style="color:green">' . $PH[$LANG]['avail'] . '</strong>';
 		}
 	}
-// Test for other modules
-	$other_modules_reqd = array();
-	foreach ($php_dlls_other as $dll){
-		if (!@extension_loaded($dll)){
-			if (!can_load_dll($dll)){
-				$other_modules_reqd[] = '<strong style="color:red">' . 'Недоступно' . '</strong>';
-				continue;
-			}
-		}
-		$other_modules_reqd[] = '<strong style="color:green">' . 'Доступно' . '</strong>';
-	}
-// Can we find Imagemagick anywhere on the system?
-	$exe = (DIRECTORY_SEPARATOR == '\\') ? '.exe' : '';
-	$magic_home = getenv('MAGICK_HOME');
-	$img_imagick = '';
-	if(empty($magic_home)){
-		$locations = array('C:/WINDOWS/', 'C:/WINNT/', 'C:/WINDOWS/SYSTEM/', 'C:/WINNT/SYSTEM/', 'C:/WINDOWS/SYSTEM32/', 
-		'C:/WINNT/SYSTEM32/', '/usr/bin/', '/usr/sbin/', '/usr/local/bin/', '/usr/local/sbin/', '/opt/', '/usr/imagemagick/', 
-		'/usr/bin/imagemagick/');
-		$path_locations = str_replace('\\', '/', (explode(($exe) ? ';' : ':', getenv('PATH'))));
-		$locations = array_merge($path_locations, $locations);
-		foreach ($locations as $location){
-			// The path might not end properly, fudge it
-			if (substr($location, -1, 1) !== '/'){
-				$location .= '/';
-			}
-			if (@file_exists($location) && @is_readable($location . 'mogrify' . $exe) && @filesize($location . 'mogrify' . $exe) > 3000){
-				$img_imagick = str_replace('\\', '/', $location);
-				continue;
-			}
-		}
-	}else{
-		$img_imagick = str_replace('\\', '/', $magic_home);
-	}
-	$other_modules_reqd[] = ($img_imagick) ? '<strong style="color:green">' . 'Доступно' . ', ' . $img_imagick . '</strong>' : 
-	'<strong style="color:blue">' . 'Не удалось найти приложение.' . '</strong>'; 
+
 // Check permissions on files/directories we need access to
 	umask(0);
 	$passed['files'] = true;
@@ -189,8 +137,8 @@ function get_requirements (){
 	@fclose($fp);
 	@unlink(PATH_ROOT.DS . 'cache/' . 'test_lock');
 	$passed['files'] = ($exists && $write && $passed['files']) ? true : false;
-	$exists = ($exists) ? '<strong style="color:green">' . 'Найден' . '</strong>' : '<strong style="color:red">' . 'Не найден' . '</strong>';
-	$write = ($write) ? ', <strong style="color:green">' . 'допускает запись' . '</strong>' : (($exists) ? ', <strong style="color:red">' . 'не допускает запись' . '</strong>' : '');
+	$exists = ($exists) ? '<strong style="color:green">' . $PH[$LANG]['f_found'] . '</strong>' : '<strong style="color:red">' . $PH[$LANG]['f_nfound'] . '</strong>';
+	$write = ($write) ? ', <strong style="color:green">' . $PH[$LANG]['f_write'] . '</strong>' : (($exists) ? ', <strong style="color:red">' . $PH[$LANG]['f_nwrite'] . '</strong>' : '');
 	$cache_reqd = $exists . $write;
 
 	
@@ -199,19 +147,19 @@ function get_requirements (){
 	$write = u_is_writable(PATH_ROOT.DS . 'includes/config.php');
 	$passed['files'] = $exists && $write && $passed['files'];
 	
-	$exists_str = $exists ? '<strong style="color:green">' . 'Найден' . '</strong>' : '<strong style="color:red">' . 'Не найден, создайте пустой файл "includes/config.php" и установите его права на запись' . '</strong>';
-	$write_str = ($write) ? ', <strong style="color:green">' . 'допускает запись' . '</strong>' : (($exists) ? ', <strong style="color:red">' . 'не допускает запись' . '</strong>' : '');
+	$exists_str = $exists ? '<strong style="color:green">' .  $PH[$LANG]['f_found'] . '</strong>' : '<strong style="color:red">' . $PH[$LANG]['f_nfoundcfg'] . '</strong>';
+	$write_str = ($write) ? ', <strong style="color:green">' .  $PH[$LANG]['f_write'] . '</strong>' : (($exists) ? ', <strong style="color:red">' . $PH[$LANG]['f_nwrite'] . '</strong>' : '');
 	$config_reqd = $exists ? $exists_str . $write_str : $exists_str;
-	$url = (!in_array(false, $passed)) ? 'index.php?content=2' : 'index.php?content=1';
-	$not_passed = (!in_array(false, $passed)) ? 'Следующий шаг' : 'Требования не выполнены! Перепроверить?';
-	include('req.html');
+	$url = (!in_array(false, $passed)) ? 'index.php?lang='.$LANG.'&content=2' : 'index.php?lang='.$LANG.'&content=1';
+	$not_passed = (!in_array(false, $passed)) ? $PH[$LANG]['btn_next'] : $PH[$LANG]['btn_notreq'];
+	include($LANG.'_req.html');
 }		
 
 	/**
 	* Obtain the information required to connect to the database
 	*/
 function get_database_settings(){
-	global $db_config_options, $admin_config_options;
+	global $db_config_options, $admin_config_options, $LANG, $PH;
 	
 	// Obtain any submitted data
 	$data = get_submitted_data();
@@ -223,7 +171,7 @@ function get_database_settings(){
 	if (isset($_POST['testdb'])){
 		$cmtg = true;
 		if (!isset($available_dbms[$data['dbms']]) || !$available_dbms[$data['dbms']]['AVAILABLE']){
-			$error[] = 'Не удалось загрузить модуль PHP для выбранного типа базы данных.';
+			$error[] = $PH[$LANG]['db_nomysql'];
 			$connect_test = false;
 		}
 		else{
@@ -240,12 +188,13 @@ function get_database_settings(){
 			);
 		}
 		if ($connect_test){
-			$connect_success = '<strong style="color:green">Успешное подключение</strong>';
+			$connect_success = '<strong style="color:green">'. $PH[$LANG]['db_connok'] .'</strong>';
 		}
 		else{
 			$connect_success = '<strong style="color:red">' . implode('<br />', $error) . '</strong>';
 		}
 	}
+	
 	if (!$connect_test){
 		
 		// Update the list of available DBMS modules to only contain those which can be used
@@ -267,21 +216,9 @@ function get_database_settings(){
 				continue;
 			}
 			$options = isset($vars['options']) ? $vars['options'] : '';
-			
-			/*$template->assign_block_vars('options', array(
-				'KEY'			=> $config_key,
-				'TITLE'			=> $lang[$vars['lang']],
-				'S_EXPLAIN'		=> $vars['explain'],
-				'S_LEGEND'		=> false,
-				'TITLE_EXPLAIN'	=> ($vars['explain']) ? $lang[$vars['lang'] . '_EXPLAIN'] : '',
-				'CONTENT'		=> $this->p_master->input_field($config_key, $vars['type'], $data[$config_key], $options),
-				)
-			);*/
 		}
 	}
-			// And finally where do we want to go next (well today is taken isn't it :P)
-	$s_hidden_fields = ($data['img_imagick']) ? '<input type="hidden" name="img_imagick" value="' . addslashes($data['img_imagick']) . '" />' : '';
-	$s_hidden_fields .= '<input type="hidden" name="language" value="' . $data['language'] . '" />';
+	
 	if ($connect_test){
 		foreach ($db_config_options as $config_key => $vars){
 			if (!is_array($vars)){
@@ -290,19 +227,18 @@ function get_database_settings(){
 			$s_hidden_fields .= '<input type="hidden" name="' . $config_key . '" value="' . $data[$config_key] . '" />';
 		}
 	}
-	$url = ($connect_test) ? "index.php?content=3" : "index.php?content=2";
 	$s_hidden_fields .= ($connect_test) ? '' : '<input type="hidden" name="testdb" value="true" />';
 
-	include('db.html');
+	$url = ($connect_test) ? "index.php?lang=".$LANG."&content=3" : "index.php?lang=".$LANG."&content=2";
+	
+	include($LANG.'_db.html');
 }
 
 /**
-* Writes the config file to disk, or if unable to do so offers alternative methods
-*/
-function create_config_file()
-{
-	global $php_dlls_other;
-	global $db_config_options, $admin_config_options;
+ * Writes the config file to disk, or if unable to do so offers alternative methods
+ */
+function create_config_file() {
+	global $db_config_options, $admin_config_options, $LANG, $PH;
 
 	// Obtain any submitted data
 	$data = get_submitted_data();
@@ -314,8 +250,6 @@ function create_config_file()
 		header( 'Location: /installation' );
 	}
 
-	$s_hidden_fields = ($data['img_imagick']) ? '<input type="hidden" name="img_imagick" value="' . addslashes($data['img_imagick']) . '" />' : '';
-	$s_hidden_fields .= '<input type="hidden" name="language" value="' . $data['language'] . '" />';
 	$written = false;
 
 	// Create a list of any PHP modules we wish to have loaded
@@ -323,8 +257,7 @@ function create_config_file()
 	$available_dbms = get_available_dbms($data['dbms']);
 	$check_exts = array_merge(array($available_dbms[$data['dbms']]['MODULE']), $php_dlls_other);
 
-	foreach ($check_exts as $dll)
-	{
+	foreach ($check_exts as $dll) {
 		if (!@extension_loaded($dll))
 		{
 			if (!can_load_dll($dll))
@@ -338,8 +271,7 @@ function create_config_file()
 
 	// Create a lock file to indicate that there is an install in progress
 	$fp = @fopen(PATH_ROOT . DS . 'cache/install_lock', 'wb');
-	if ($fp === false)
-	{
+	if ($fp === false) {
 		// We were unable to create the lock file - abort
 		error('Не удалось записать файл блокировки.', __LINE__, __FILE__);
 	}
@@ -350,38 +282,35 @@ function create_config_file()
 	$load_extensions = implode(',', $load_extensions);
 
 	// Time to convert the data provided into a config file
-	$config_data = "<?php\n";
-	$config_data .= "/**\n";
-	$config_data .= "* @version \$Id\n";
-	$config_data .= "* @package Abricos\n";
-	$config_data .= "* @copyright Copyright (C) 2008 Abricos. All rights reserved.\n";
-	$config_data .= "* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php\n*/\n\n\n/**\n";
-	$config_data .= "* Настройка режима \"только для чтения\" работы с БД.\n*/\n";
-	$config_data .= "\$config['Database']['readonly'] = false;\n\n";
-	
-	$config_data_array = array(
-		"config['Database']['dbtype']"		=> $available_dbms[$data['dbms']]['DRIVER'],
-		"config['Database']['dbname']"		=> $data['dbname'],
-		"config['Server']['servername']"	=> ($data['dbhost']==='')?'localhost':$data['dbhost'],
-		"config['Server']['port']"			=> ($data['dbport']==='')?(int)3306:$data['dbport'],
-		"config['Server']['username']"		=> $data['dbuser'],
-		"config['Server']['password']"		=> htmlspecialchars_decode($data['dbpasswd']),
-		"config['Misc']['cookieprefix']"	=> $data['table_prefix'],
-		"config['Misc']['cookietimeout']"	=> 86400 * 14,
-		"config['Misc']['charset']"			=> "utf-8",
-		"config['Misc']['language']" 		=> "ru"
-	);
+	$config_data = "<?php
+/**
+ * @package Abricos
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
+ */
+  
+/**
+ * Настройка режима \"только для чтения\" работы с БД.
+ */
+\$config['Database']['readonly'] = false;
+ 
+\$config['Database']['dbtype'] = '".$available_dbms[$data['dbms']]['DRIVER']."';
+\$config['Database']['dbname'] = '".$data['dbname']."';
+\$config['Database']['tableprefix'] = '".$data['table_prefix']."';
+\$config['Server']['servername'] = '".($data['dbhost']==='' ? 'localhost' : $data['dbhost'])."';
+\$config['Server']['port'] = '".($data['dbport']==='' ? (int)3306 : $data['dbport'])."';
+\$config['Server']['username'] = '".$data['dbuser']."';
+\$config['Server']['password'] = '".htmlspecialchars_decode($data['dbpasswd'])."';
 
-	foreach ($config_data_array as $key => $value)
-	{
-		if(is_int($value))$config_data .= "\${$key} = " . str_replace("'", "\\'", str_replace('\\', '\\\\', $value)) . ";\n";
-		else $config_data .= "\${$key} = '" . str_replace("'", "\\'", str_replace('\\', '\\\\', $value)) . "';\n";
-	}
-	unset($config_data_array);
+\$config['Misc']['cookieprefix'] = 'cmsab_';
+\$config['Misc']['cookietimeout'] = 86400 * 14;
+\$config['Misc']['language'] = '".$LANG."';
+
+";
+	
 	
 	$config_data .= "\n\$config['Misc']['brick_cache'] = false;\n\n";
 	$config_data .= "// Режим работы платформы для разработчика\n";
-	$config_data .= "\$config['Misc']['develop_mode'] = true;\n\n";
+	$config_data .= "\$config['Misc']['develop_mode'] = false;\n\n";
 	$config_data .= "// Показать информацию работы сервера (скорость сборки страницы, кол-во запросов к БД)\n";
 	$config_data .= "\$config['Misc']['showbuildinfo'] = false;\n\n";
 	$config_data .= "\$config['JsonDB']['use'] = false;\n\n";
@@ -406,61 +335,51 @@ function create_config_file()
 	$config_data .= '?' . '>'; // Done this to prevent highlighting editors getting confused!
 
 	// Attempt to write out the config file directly. If it works, this is the easiest way to do it ...
-	if ((file_exists(PATH_ROOT . DS . 'includes/config.php') && u_is_writable(PATH_ROOT . DS . 'includes/config.php')) || u_is_writable(PATH_ROOT . DS))
-	{
+	if ((file_exists(PATH_ROOT . DS . 'includes/config.php') && u_is_writable(PATH_ROOT . DS . 'includes/config.php')) || u_is_writable(PATH_ROOT . DS)) {
 		// Assume it will work ... if nothing goes wrong below
 		$written = true;
 
-		if (!($fp = @fopen(PATH_ROOT . DS . 'includes/config.php', 'w')))
-		{
+		if (!($fp = @fopen(PATH_ROOT . DS . 'includes/config.php', 'w'))) {
 			// Something went wrong ... so let's try another method
 			$written = false;
 		}
 
-		if (!(@fwrite($fp, $config_data)))
-		{
+		if (!(@fwrite($fp, $config_data))) {
 			// Something went wrong ... so let's try another method
 			$written = false;
 		}
 
 		@fclose($fp);
 
-		if ($written)
-		{
+		if ($written) {
 			// We may revert back to chmod() if we see problems with users not able to change their config.php file directly
 			u_chmod(PATH_ROOT . DS . 'includes/config.php', CHMOD_READ);
 		}
 	}
 
-	if (isset($_POST['dldone']))
-	{
+	if (isset($_POST['dldone'])) {
 		// Do a basic check to make sure that the file has been uploaded
 		// Note that all we check is that the file has _something_ in it
 		// We don't compare the contents exactly - if they can't upload
 		// a single file correctly, it's likely they will have other problems....
-		if (filesize(PATH_ROOT . DS . 'includes/config.php') > 10)
-		{
+		if (filesize(PATH_ROOT . DS . 'includes/config.php') > 10) {
 			$written = true;
 		}
 	}
 
 	$config_options = array_merge($db_config_options, $admin_config_options);
 
-	foreach ($config_options as $config_key => $vars)
-	{
-		if (!is_array($vars))
-		{
+	foreach ($config_options as $config_key => $vars) {
+		if (!is_array($vars)) {
 			continue;
 		}
 		$s_hidden_fields .= '<input type="hidden" name="' . $config_key . '" value="' . $data[$config_key] . '" />';
 	}
 
-	if (!$written)
-	{
+	if (!$written) {
 		// OK, so it didn't work let's try the alternatives
 
-		if (isset($_POST['dlconfig']))
-		{
+		if (isset($_POST['dlconfig'])) {
 			// They want a copy of the file to download, so send the relevant headers and dump out the data
 			header("Content-Type: text/x-delimtext; name=\"config.php\"");
 			header("Content-disposition: attachment; filename=config.php");
@@ -469,20 +388,19 @@ function create_config_file()
 		}
 		
 		// The option to download the config file is always available, so output it here
-		$connect_success = 'Не удалось записать конфигурационный файл. Обратитесь в службу поддержки';
-		$connect_success .= 'В папке includes/ есть файлы конфигурации config.new.php и config.newwebos.php. При необходимости переименуйте один из них в config.php.';
-		include('conf.html');
+		$connect_success = $PH[$LANG]['cfg_err'];
+		include($LANG.'_conf.html');
 		return;
 	}
 	else
 	{
-		$connect_success = 'Конфигурационный файл записан. Установка завершена.<br />Для продолжения удалите папку install и нажмите Готово.';
-		include('conf.html');
+		$connect_success = $PH[$LANG]['cfg_ok'];
+		include($LANG.'_conf.html');
 		return;
 	}
 
-/**/
-	include('conf.html');
+
+	include($LANG.'_conf.html');
 }
 
 function get_available_dbms($dbms = false, $return_unavailable = false, $only_20x_options = false){
@@ -724,8 +642,7 @@ function u_chmod($filename, $perms = CHMOD_READ)
 /**
 * Determine if we are able to load a specified PHP module and do so if possible
 */
-function can_load_dll($dll)
-{
+function can_load_dll($dll) {
 	// SQLite2 is a tricky thing, from 5.0.0 it requires PDO; if PDO is not loaded we must state that SQLite is unavailable
 	// as the installer doesn't understand that the extension has a prerequisite.
 	//
@@ -751,54 +668,41 @@ function can_load_dll($dll)
 * @param string $file Path to perform write test on
 * @return bool True when the path is writable, otherwise false.
 */
-function u_is_writable($file)
-{
-	if (strtolower(substr(PHP_OS, 0, 3)) === 'win' || !function_exists('is_writable'))
-	{
-		if (file_exists($file))
-		{
+function u_is_writable($file) {
+	if (strtolower(substr(PHP_OS, 0, 3)) === 'win' || !function_exists('is_writable')) {
+		if (file_exists($file)) {
 			// Canonicalise path to absolute path
 			$file = u_realpath($file);
 
-			if (is_dir($file))
-			{
+			if (is_dir($file)) {
 				// Test directory by creating a file inside the directory
 				$result = @tempnam($file, 'i_w');
 
-				if (is_string($result) && file_exists($result))
-				{
+				if (is_string($result) && file_exists($result)) {
 					unlink($result);
 
 					// Ensure the file is actually in the directory (returned realpathed)
 					return (strpos($result, $file) === 0) ? true : false;
 				}
-			}
-			else
-			{
+			} else {
 				$handle = @fopen($file, 'r+');
 
-				if (is_resource($handle))
-				{
+				if (is_resource($handle)) {
 					fclose($handle);
 					return true;
 				}
 			}
-		}
-		else
-		{
+		} else {
 			// file does not exist test if we can write to the directory
 			$dir = dirname($file);
 
-			if (file_exists($dir) && is_dir($dir) && u_is_writable($dir))
-			{
+			if (file_exists($dir) && is_dir($dir) && u_is_writable($dir)) {
 				return true;
 			}
 		}
 
 		return false;
-	}
-	else
-	{
+	} else {
 		return is_writable($file);
 	}
 }
@@ -806,8 +710,7 @@ function u_is_writable($file)
 /**
 * Get submitted data
 */
-function get_submitted_data()
-{
+function get_submitted_data() {
 	return array(
 		'language'		=> basename(request_var('language', '')),
 		'dbms'			=> request_var('dbms', ''),
@@ -925,8 +828,7 @@ function request_var($var_name, $default, $multibyte = false, $cookie = false)
 *
 * @access private
 */
-function set_var(&$result, $var, $type, $multibyte = false)
-{
+function set_var(&$result, $var, $type, $multibyte = false) {
 	settype($var, $type);
 	$result = $var;
 
@@ -984,14 +886,8 @@ function dbms_select($default = '', $only_20x_options = false)
 	return $dbms_options;
 }
 
-/**
-* Used to test whether we are able to connect to the database the user has specified
-* and identify any problems (eg there are already tables with the names we want to use
-* @param	array	$dbms should be of the format of an element of the array returned by {@link get_available_dbms get_available_dbms()}
-*					necessary extensions should be loaded already
-*/
-function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix, $dbhost, $dbuser, $dbpasswd, $dbname, $dbport, $prefix_may_exist = false, $load_dbal = true, $unicode_check = true)
-{
+function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix, $dbhost, $dbuser, $dbpasswd, $dbname, $dbport, $prefix_may_exist = false, $load_dbal = true, $unicode_check = true) {
+	global $PH, $LANG;
 	$dbms = $dbms_details['DRIVER'];
 	if ($load_dbal){
 		// Include the DB layer
@@ -1001,18 +897,17 @@ function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix,
 	$sql_db = 'dbal_' . $dbms;
 	$db = new $sql_db();
 	$db->sql_return_on_error(true);
-
+	
 	// Check that we actually have a database name before going any further.....
-	if ($dbms_details['DRIVER'] != 'sqlite' && $dbms_details['DRIVER'] != 'oracle' && $dbname === '')
-	{
-		$error[] = 'Не указано название базы данных.';
+	if ($dbms_details['DRIVER'] != 'sqlite' && $dbms_details['DRIVER'] != 'oracle' && $dbname === '') {
+		$error[] = $PH[$LANG]['db_notname'];
 		return false;
 	}
 
 	// Make sure we don't have a daft user who thinks having the SQLite database in the forum directory is a good idea
 	if ($dbms_details['DRIVER'] == 'sqlite' && stripos(u_realpath($dbhost), u_realpath('../')) === 0)
 	{
-		$error[] = 'Указанный файл базы данных находится в папке конференции. Необходимо переместить его в папку, недоступную из интернета.';
+		$error[] = 'Указанный файл базы данных находится в папке движка. Необходимо переместить его в папку, недоступную из интернета';
 		return false;
 	}
 
@@ -1023,7 +918,7 @@ function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix,
 		case 'mysqli':
 			if (strspn($table_prefix, '-./\\') !== 0)
 			{
-				$error[] = 'Указанный префикс недопустим для вашей базы данных. Введите другой префикс без специальных символов типа дефиса.';
+				$error[] = $PH[$LANG]['db_erprefix'];
 				return false;
 			}
 
@@ -1051,21 +946,17 @@ function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix,
 
 	if (strlen($table_prefix) > $prefix_length)
 	{
-		$error[] = sprintf('Указанный префикс таблиц слишком длинный. Длина префикса не должна превышать %d символов.', $prefix_length);
+		$error[] = sprintf($PH[$LANG]['db_erprefixlen'], $prefix_length);
 		return false;
 	}
 
 	// Try and connect ...
-	if (is_array($db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname, $dbport, false, true)))
-	{
+	if (is_array($db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname, $dbport, false, true))) {
 		$db_error = $db->sql_error();
-		$error[] = 'Не удалось подключиться к базе данных. Ниже показан текст сообщения об ошибке.' . '<br />' . (($db_error['message']) ? $db_error['message'] : 'Нет сообщения об ошибке.');
-	}
-	else
-	{
+		$error[] =  $PH[$LANG]['db_errtext'] . '<br />' . (($db_error['message']) ? $db_error['message'] : $PH[$LANG]['db_noterr']);
+	} else {
 		// Likely matches for an existing phpBB installation
-		if (!$prefix_may_exist)
-		{
+		if (!$prefix_may_exist) {
 			$temp_prefix = strtolower($table_prefix);
 			$table_ary = array($temp_prefix . 'attachments', $temp_prefix . 'config', $temp_prefix . 'sessions', $temp_prefix . 'topics', $temp_prefix . 'users');
 
@@ -1073,18 +964,15 @@ function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix,
 			$tables = array_map('strtolower', $tables);
 			$table_intersect = array_intersect($tables, $table_ary);
 
-			if (sizeof($table_intersect))
-			{
-				$error[] = 'Таблицы с указанным префиксом уже существуют. Введите другой префикс.';
+			if (sizeof($table_intersect)) {
+				$error[] =  $PH[$LANG]['db_errprefixex'];
 			}
 		}
 
 		// Make sure that the user has selected a sensible DBAL for the DBMS actually installed
-		switch ($dbms_details['DRIVER'])
-		{
+		switch ($dbms_details['DRIVER']) {
 			case 'mysqli':
-				if (version_compare(mysqli_get_server_info($db->db_connect_id), '4.1.3', '<'))
-				{
+				if (version_compare(mysqli_get_server_info($db->db_connect_id), '4.1.3', '<')) {
 					$error[] = 'Установленная на сервере версия MySQL несовместима с выбранным вариантом «MySQL с расширением MySQLi». Вместо него попробуйте выбрать вариант «MySQL».';
 				}
 			break;
@@ -1209,7 +1097,7 @@ function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix,
 
 					if ($row['server_encoding'] !== 'UNICODE' && $row['server_encoding'] !== 'UTF8')
 					{
-						$error[] = 'Выбранная база данных создана не с кодировкой <var>UNICODE</var> или <var>UTF8</var>. Попробуйте установить конференцию в базу данных с кодировкой <var>UNICODE</var> или <var>UTF8</var>.';
+						$error[] = 'Выбранная база данных создана не с кодировкой <var>UNICODE</var> или <var>UTF8</var>. Попробуйте установить движок в базу данных с кодировкой <var>UNICODE</var> или <var>UTF8</var>.';
 					}
 				}
 			break;
@@ -1290,7 +1178,7 @@ function get_tables($db)
 function error($error, $line, $file, $skip = false){
 	if ($skip)
 		{
-			$legend = 'Ошибка при установке';
+			$legend = 'Error during installation';
 			$title = basename($file) . ' [ ' . $line . ' ]';
 			$result = '<b style="color:red">' . $error . '</b>';
 			return;
@@ -1300,7 +1188,7 @@ function error($error, $line, $file, $skip = false){
 	echo '<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">';
 	echo '<head>';
 	echo '<meta http-equiv="content-type" content="text/html; charset=utf-8" />';
-	echo '<title>Критическая ошибка при установке</title>';
+	echo '<title>Fatal error during installation</title>';
 	echo '<link href="style.css" rel="stylesheet" type="text/css" media="screen" />';
 	echo '</head>';
 	echo '<body id="errorpage">';
@@ -1312,7 +1200,7 @@ function error($error, $line, $file, $skip = false){
 	echo '		<div class="panel">';
 	echo '			<span class="corners-top"><span></span></span>';
 	echo '			<div id="content">';
-	echo '				<h1>Критическая ошибка при установке</h1>';
+	echo '				<h1>Fatal error during installation</h1>';
 	// echo '		<p>Критическая ошибка при установке</p><br />';
 	// echo '		<p>' . basename($file) . ' [ ' . $line . ' ]</p><br />';
 	echo '		<p><b>' . $error . '</b></p><bк />';
@@ -1322,7 +1210,7 @@ function error($error, $line, $file, $skip = false){
 	echo '		</div>';
 	echo '	</div>';
 	echo '	<div id="page-footer">';
-	echo '		Powered by <a href="http://abricos.org/">Abricos</a>';
+	echo '		Powered by <a href="http://abricos.org/">Abricos Platform</a>';
 	echo '	</div>';
 	echo '</div>';
 	echo '</body>';

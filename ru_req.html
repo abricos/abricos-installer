@@ -1,0 +1,87 @@
+<?php require_once 'tt/ru_header.html'; ?>
+
+<!-- start content -->
+<div id="content">
+	<div class="post">
+		<div class="entry">
+			<h1 class="title">Программная совместимость</h1>
+			<p>
+				Перед установкой платформы Абрикос будут проведены проверки файлов и конфигурации сервера, 
+				чтобы удостовериться в том, что ее можно установить и запустить. Внимательно 
+				ознакомьтесь с результатами и не переходите к следующему шагу установки до тех пор, 
+				пока необходимые проверки не будут пройдены.
+			</p>
+			<div class="req">
+				<fieldset>
+					<legend>Версия PHP</legend>
+					<p>
+						Для установки платформы <strong>требуется</strong> версия PHP не ниже 5.0.0 
+					</p>
+					<dl>
+						<dt>Версия PHP ≥ 5.0.0:</dt>
+						<dd><?php print $php_version_reqd;?></dd>
+					</dl>
+					
+				</fieldset>
+				<fieldset>
+					<legend>Поддержка базы данных MySQL</legend>
+					<dl>
+						<dt>Поддержка MySQL:</dt>
+						<dd><?php print $mysql_support_reqd[0];?></dd>
+					</dl>
+				</fieldset>
+				<fieldset>
+					<legend>Файлы и папки</legend>
+					<p>
+						Для работы платформы <strong>необходим</strong> доступ на чтение 
+						или запись определённых файлов и папок. Если вы увидите надпись 
+						«Не найден», то необходимо создать соответствующий файл или папку. 
+						А если увидите надпись «Нет прав на запись», то необходимо 
+						изменить права на файл или на папку, чтобы разрешить Abricos запись в них.
+					</p>
+					<dl>
+						<dt>cache/:</dt>
+						<dd><?php print $cache_reqd;?></dd>
+					</dl>
+					<dl>
+						<dt>includes/config.php:</dt>
+						<dd><?php print $config_reqd;?></dd>
+					</dl>
+					<dl>
+						<dt>.htaccess:</dt>
+						<dd><?php print $htaccess_reqd;?></dd>
+					</dl>
+				</fieldset>
+				<fieldset>
+					<legend>Проверка расширения <samp>mod_rewrite</samp></legend>
+					<p><strong>Необходимо</strong>. <samp>mod_rewrite</samp> — это расширение PHP, предоставляет механизм динамического изменения запрашиваемых URL-ов.</p>
+					<dl>
+						<dt>Поддержка расширения <samp>mod_rewrite</samp><br /></dt>
+						<dd><?php print $mod_rewrite_reqd;?></dd>
+					</dl>
+				</fieldset>
+			</div>
+			<fieldset class="submit-buttons">
+				<legend>Следующий шаг</legend>
+				<a class="<?php print (!in_array(false, $passed)) ? 'button1' : 'button-no-req';?>" href="<?php print $url;?>"><?php print $not_passed;?></a>
+			</fieldset>
+		</div>
+	</div>
+</div>
+<!-- end content -->
+<!-- start sidebar -->
+<div id="sidebar">
+	<ul>
+		<li>
+			<h2>Этапы установки</h2>
+			<ul>
+				<li><strong style="color:orange">Требования</strong></li>
+				<li><a href="#">Настройка базы данных</a></li>
+				<li><a href="#">Файл конфигурации</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<!-- end sidebar -->
+
+<?php require_once 'tt/ru_footer.html'; ?>

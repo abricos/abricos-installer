@@ -1,0 +1,85 @@
+<?php require_once 'tt/en_header.html'; ?>
+
+<!-- start content -->
+<div id="content">
+	<div class="post">
+		<div class="entry">
+			<h1 class="title">Software Compatibility</h1>
+			<p>
+				Before installing Abricos Platform will be audited files and server configuration 
+				to ensure that it can be installed and run. Carefully read the results and do not 
+				proceed to the next step as long as the necessary checks will not be passed.
+			</p>
+			<div class="req">
+				<fieldset>
+					<legend>PHP Version</legend>
+					<p>
+						To install the <strong>required</strong> platform for PHP 5.0.0
+					</p>
+					<dl>
+						<dt>PHP Version ≥ 5.0.0:</dt>
+						<dd><?print $php_version_reqd;?></dd>
+					</dl>
+					
+				</fieldset>
+				<fieldset>
+					<legend>Support MySQL database</legend>
+					<dl>
+						<dt>Support MySQL:</dt>
+						<dd><?print $mysql_support_reqd[0];?></dd>
+					</dl>
+				</fieldset>
+				<fieldset>
+					<legend>Folder and Files</legend>
+					<p>
+						To the platform requires access to read or write certain files and folders. 
+						If you see the message "Not Found", you must create the file or folder. 
+						And if you see the message "No permission to write," it is necessary to change 
+						the permissions on a file or folder to allow Abricos write to them.
+					</p>
+					<dl>
+						<dt>cache/:</dt>
+						<dd><?print $cache_reqd;?></dd>
+					</dl>
+					<dl>
+						<dt>includes/config.php:</dt>
+						<dd><?print $config_reqd;?></dd>
+					</dl>
+					<dl>
+						<dt>.htaccess:</dt>
+						<dd><?print $htaccess_reqd;?></dd>
+					</dl>
+				</fieldset>
+				<fieldset>
+					<legend>Check extension <samp>mod_rewrite</samp></legend>
+					<p><strong>Necessary</strong>. <samp>mod_rewrite</samp> — an extension of the server Apache, provides a mechanism for dynamically changing the requested URL-s.</p>
+					<dl>
+						<dt>Support <samp>mod_rewrite</samp><br /></dt>
+						<dd><?print $mod_rewrite_reqd;?></dd>
+					</dl>
+				</fieldset>
+			</div>
+			<fieldset class="submit-buttons">
+				<legend>Next Step</legend>
+				<a class="<?php print (!in_array(false, $passed)) ? 'button1' : 'button-no-req';?>" href="<?print $url;?>"><?print $not_passed;?></a>
+			</fieldset>
+		</div>
+	</div>
+</div>
+<!-- end content -->
+<!-- start sidebar -->
+<div id="sidebar">
+	<ul>
+		<li>
+			<h2>Installation Steps</h2>
+			<ul>
+				<li><strong style="color:orange">Requirements</strong></li>
+				<li><a href="#">Database Setting</a></li>
+				<li><a href="#">Configuration File</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<!-- end sidebar -->
+
+<?php require_once 'tt/en_footer.html'; ?>

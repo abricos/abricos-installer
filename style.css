@@ -13,6 +13,9 @@ Released for free under a Creative Commons Attribution 2.5 License
 	clear: both;
 }
 
+.center {
+	text-align: center;
+}
 
 body {
 	color: #40C1D4;
@@ -23,7 +26,7 @@ body {
 	margin: 20px;
 	background: #FFFFFF;
 	font-family: Georgia, "Times New Roman", Times, serif;
-	font-size: 13px;
+	font-size: 15px;
 }
 
 h1, h2, h3 {
@@ -82,13 +85,13 @@ a:hover {
 }
 
 #logo h1 {
-	padding: 10px 0 0 0;
+	padding: 0 0 10px 0;
 	letter-spacing: -2px;
 	font-size: 2.4em;
 }
 
 #logo h2 {
-	padding: 22px 0 0 5px;
+	padding: 13px 0 0 5px;
 	letter-spacing: -1px;
 	font-size: 1.4em;
 	font-weight: normal;
@@ -345,6 +348,7 @@ a:hover {
 /* General form styles
 ----------------------------------------*/
 div.req ,
+div.license,
 fieldset {
 	margin: 15px 0;
 	padding: 10px;
@@ -861,4 +865,8 @@ input.disabled {
 	border-bottom: 1px solid #CCCCCC;
 	padding-bottom: 5px;
 	color: #333333;
+}
+
+/* * * * * Select Language * * * * */
+.selang .title {
 }

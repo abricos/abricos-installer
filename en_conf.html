@@ -1,0 +1,34 @@
+<?php require_once 'tt/en_header.html'; ?>
+
+<!-- start content -->
+<div id="content">
+	<div class="post">
+		<div class="entry">
+			<h1 class="title">Configuration File</h1>
+			<p><?php print $connect_success;?></p>
+		</div>
+		<fieldset class="submit-buttons">
+			<legend>Done</legend>
+			<br />
+			<a class="button1" href="http://<?php print $_SERVER[HTTP_HOST];?>">Finish</a>
+		</fieldset>
+	</div>
+</div>
+<!-- end content -->
+<!-- start sidebar -->
+<div id="sidebar">
+	<ul>
+		<li>
+			<h2>Installation Steps</h2>
+			<ul>
+				<li>Requirements</li>
+				<li>Database Setting</li>
+				<li><strong style="color:orange">Configuration File</strong></li>
+				
+			</ul>
+		</li>
+	</ul>
+</div>
+<!-- end sidebar -->
+
+<?php require_once 'tt/en_footer.html'; ?>

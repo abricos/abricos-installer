@@ -1,0 +1,34 @@
+<?php require_once 'tt/ru_header.html'; ?>
+
+<!-- start content -->
+<div id="content">
+	<div class="post">
+		<div class="entry">
+			<h1 class="title">Файл конфигурации</h1>
+			<p><?php print $connect_success;?></p>
+		</div>
+		<fieldset class="submit-buttons">
+			<legend>Готово</legend>
+			<br />
+			<a class="button1" href="http://<?php print $_SERVER[HTTP_HOST];?>">Готово</a>
+		</fieldset>
+	</div>
+</div>
+<!-- end content -->
+<!-- start sidebar -->
+<div id="sidebar">
+	<ul>
+		<li>
+			<h2>Этапы установки</h2>
+			<ul>
+				<li>Требования</li>
+				<li>Настройка базы данных</li>
+				<li><strong style="color:orange">Файл конфигурации</strong></li>
+				
+			</ul>
+		</li>
+	</ul>
+</div>
+<!-- end sidebar -->
+
+<?php require_once 'tt/ru_footer.html'; ?>
