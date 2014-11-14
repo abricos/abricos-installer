@@ -1,10 +1,9 @@
 <?php
 /**
-* @version $Id$
 * @package Abricos
 * @copyright Copyright (C) 2011 Abricos. All rights reserved.
 * @link http://abricos.org
-* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
+* @license MIT
 */
 
 error_reporting(E_ERROR);
