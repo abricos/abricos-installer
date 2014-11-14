@@ -118,12 +118,12 @@ function get_requirements() {
     $host = $_SERVER['HTTP_HOST'] ? $_SERVER['HTTP_HOST'] : $_ENV['HTTP_HOST'];
     $url = str_replace("\\", "/", "http://".$host.DS."__on_mod_rewrite/");
     $ok = @file_get_contents($url);
-    $isNginx = false;
+    $isNginx = true;
     if (function_exists('apache_get_modules')) {
-        $isNginx = in_array('mod_rewrite', apache_get_modules());
+        $isNginx = false;
     }
     if (!$isNginx){
-        if ($ok != "ok") {
+        if (!in_array('mod_rewrite', apache_get_modules()) || $ok != "ok") {
             $mod_rewrite_reqd = '<strong style="color:red">'.$PH[$LANG]['mrw_notavail'].'</strong>';
             $passed['mod_rewrite'] = false;
         } else {
@@ -131,6 +131,7 @@ function get_requirements() {
         }
     }else{
         if ($ok != "ok") {
+            $passed['mod_rewrite'] = false;
             $mod_rewrite_reqd = '<strong style="color:red">'.$PH[$LANG]['mrw_nginxerr'].'</strong>';
         }else{
             $mod_rewrite_reqd = '<strong style="color:green">'.$PH[$LANG]['mrw_isnginx'].'</strong>';
