@@ -7,6 +7,7 @@
 */
 
 error_reporting(E_ERROR);
+// error_reporting(E_ALL);
 
 define('DS', DIRECTORY_SEPARATOR );
 define('PATH_INSTALLATION',	dirname(__FILE__) );

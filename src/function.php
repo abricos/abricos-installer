@@ -96,7 +96,11 @@ function get_requirements() {
     $host = $_SERVER['HTTP_HOST'] ? $_SERVER['HTTP_HOST'] : $_ENV['HTTP_HOST'];
     $url = str_replace("\\", "/", "http://".$host.DS."__on_mod_rewrite/");
     $ok = @file_get_contents($url);
-    if (!in_array('mod_rewrite', apache_get_modules()) || $ok != "ok") {
+    $isModRewrite = false;
+    if (function_exists('apache_get_modules')){
+        $isModRewrite = in_array('mod_rewrite', apache_get_modules());
+    }
+    if (!$isModRewrite || $ok != "ok") {
         $mod_rewrite_reqd = '<strong style="color:red">'.$PH[$LANG]['mrw_notavail'].'</strong>';
         $passed['mod_rewrite'] = false;
     } else
