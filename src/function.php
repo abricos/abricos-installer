@@ -20,10 +20,9 @@ $PH = array(
     Сервер nginx. Добавьте в настройки хоста: <br />
     location / {<br />
         &nbsp;&nbsp;...<br />
-        &nbsp;&nbsp;<b>try_files $url $url/ /index.php?$args;</b><br />
+        &nbsp;&nbsp;<b>try_files \$url \$url/ /index.php?\$args;</b><br />
         &nbsp;&nbsp;...<br />
     }
-
 ",
         'mrw_isnginx' => "Сервер nginx",
         'f_found' => 'Найден',
@@ -58,13 +57,12 @@ $PH = array(
         'mrw_notavail' => 'Not Available. Check the file ".htaccess"',
         'mrw_nginxerr' =>
 "
-    Сервер nginx. Добавьте в настройки хоста: <br />
+    Nginx Server. Added in host config: <br />
     location / {<br />
         &nbsp;&nbsp;...<br />
-        &nbsp;&nbsp;<b>try_files $url $url/ /index.php?$args;</b><br />
+        &nbsp;&nbsp;<b>try_files \$url \$url/ /index.php?\$args;</b><br />
         &nbsp;&nbsp;...<br />
     }
-
 ",
         'mrw_isnginx' => "Nginx server",
         'f_found' => 'Found',
