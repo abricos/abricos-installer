@@ -15,6 +15,17 @@ $PH = array(
         'ht_notfound' => 'Не найден, необходимо переименовать файл "def.htaccess" в файл ".htaccess"',
         'mrw_avail' => 'Доступно',
         'mrw_notavail' => 'Недоступно. Проверьте наличие файла ".htaccess"',
+        'mrw_nginxerr' =>
+"
+    Сервер nginx. Добавьте в настройки хоста: <br />
+    location / {<br />
+        &nbsp;&nbsp;...<br />
+        &nbsp;&nbsp;<b>try_files $url $url/ /index.php?$args;</b><br />
+        &nbsp;&nbsp;...<br />
+    }
+
+",
+        'mrw_isnginx' => "Сервер nginx",
         'f_found' => 'Найден',
         'f_write' => 'допускает запись',
         'f_nfound' => 'Не найден',
@@ -45,6 +56,17 @@ $PH = array(
         'ht_notfound' => 'Not Found, rename the file "def.htaccess" to the file ".htaccess"',
         'mrw_avail' => 'Available',
         'mrw_notavail' => 'Not Available. Check the file ".htaccess"',
+        'mrw_nginxerr' =>
+"
+    Сервер nginx. Добавьте в настройки хоста: <br />
+    location / {<br />
+        &nbsp;&nbsp;...<br />
+        &nbsp;&nbsp;<b>try_files $url $url/ /index.php?$args;</b><br />
+        &nbsp;&nbsp;...<br />
+    }
+
+",
+        'mrw_isnginx' => "Nginx server",
         'f_found' => 'Found',
         'f_write' => 'can be written',
         'f_nfound' => 'Not Found',
@@ -96,15 +118,24 @@ function get_requirements() {
     $host = $_SERVER['HTTP_HOST'] ? $_SERVER['HTTP_HOST'] : $_ENV['HTTP_HOST'];
     $url = str_replace("\\", "/", "http://".$host.DS."__on_mod_rewrite/");
     $ok = @file_get_contents($url);
-    $isModRewrite = false;
-    if (function_exists('apache_get_modules')){
-        $isModRewrite = in_array('mod_rewrite', apache_get_modules());
+    $isNginx = false;
+    if (function_exists('apache_get_modules')) {
+        $isNginx = in_array('mod_rewrite', apache_get_modules());
     }
-    if (!$isModRewrite || $ok != "ok") {
-        $mod_rewrite_reqd = '<strong style="color:red">'.$PH[$LANG]['mrw_notavail'].'</strong>';
-        $passed['mod_rewrite'] = false;
-    } else
-        $mod_rewrite_reqd = '<strong style="color:green">'.$PH[$LANG]['mrw_avail'].'</strong>';
+    if (!$isNginx){
+        if ($ok != "ok") {
+            $mod_rewrite_reqd = '<strong style="color:red">'.$PH[$LANG]['mrw_notavail'].'</strong>';
+            $passed['mod_rewrite'] = false;
+        } else {
+            $mod_rewrite_reqd = '<strong style="color:green">'.$PH[$LANG]['mrw_avail'].'</strong>';
+        }
+    }else{
+        if ($ok != "ok") {
+            $mod_rewrite_reqd = '<strong style="color:red">'.$PH[$LANG]['mrw_nginxerr'].'</strong>';
+        }else{
+            $mod_rewrite_reqd = '<strong style="color:green">'.$PH[$LANG]['mrw_isnginx'].'</strong>';
+        }
+    }
 
     // Test for available database modules
     $available_dbms = get_available_dbms(false, true);
@@ -775,14 +806,14 @@ function set_var(&$result, $var, $type, $multibyte = false) {
 
     if ($type == 'string') {
         $result = trim(htmlspecialchars(str_replace(array(
-                        "\r\n",
-                        "\r",
-                        "\0"
-                    ), array(
-                        "\n",
-                        "\n",
-                        ''
-                    ), $result), ENT_COMPAT, 'UTF-8'));
+            "\r\n",
+            "\r",
+            "\0"
+        ), array(
+            "\n",
+            "\n",
+            ''
+        ), $result), ENT_COMPAT, 'UTF-8'));
 
         if (!empty($result)) {
             // Make sure multibyte characters are wellformed
