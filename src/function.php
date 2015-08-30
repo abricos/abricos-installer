@@ -311,11 +311,11 @@ function create_config_file() {
 
     // Time to convert the data provided into a config file
     $config_data = "<?php
-/**
- * @package Abricos
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
- */
-  
+
+if (file_exists('includes/config.pub.php')){
+    require_once 'config.pub.php';
+}
+
 /**
  * Настройка режима \"только для чтения\" работы с БД.
  */
@@ -334,7 +334,6 @@ function create_config_file() {
 \$config['Misc']['language'] = '".$LANG."';
 
 ";
-
 
     $config_data .= "\n\$config['Misc']['brick_cache'] = false;\n\n";
     $config_data .= "// Режим работы платформы для разработчика\n";
