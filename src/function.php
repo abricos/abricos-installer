@@ -430,6 +430,16 @@ if (file_exists('includes/config.pub.php')){
 
 function get_available_dbms($dbms = false, $return_unavailable = false, $only_20x_options = false) {
     $available_dbms = array(
+        'mysqli' => array(
+            'LABEL' => 'MySQL with MySQLi Extension',
+            'SCHEMA' => 'mysql_41',
+            'MODULE' => 'mysqli',
+            'DELIM' => ';',
+            'COMMENTS' => 'remove_remarks',
+            'DRIVER' => 'mysqli',
+            'AVAILABLE' => true,
+            '2.0.x' => true,
+        ),
         'mysql' => array(
             'LABEL' => 'MySQL',
             'SCHEMA' => 'mysql',
