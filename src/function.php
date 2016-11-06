@@ -16,7 +16,7 @@ $PH = array(
         'mrw_avail' => 'Доступно',
         'mrw_notavail' => 'Недоступно. Проверьте наличие файла ".htaccess"',
         'mrw_nginxerr' =>
-"
+            "
     Сервер nginx. Добавьте в настройки хоста: <br />
     location / {<br />
         &nbsp;&nbsp;...<br />
@@ -56,7 +56,7 @@ $PH = array(
         'mrw_avail' => 'Available',
         'mrw_notavail' => 'Not Available. Check the file ".htaccess"',
         'mrw_nginxerr' =>
-"
+            "
     Nginx Server. Added in host config: <br />
     location / {<br />
         &nbsp;&nbsp;...<br />
@@ -91,12 +91,12 @@ $PH = array(
 /**
  * Checks that the server we are installing on meets the requirements for running Abricos
  */
-function get_requirements() {
+function get_requirements(){
     global $LANG, $PH;
 
     // Test the minimum PHP version
     $php_version = PHP_VERSION;
-    if (version_compare($php_version, '5.0.0') < 0) {
+    if (version_compare($php_version, '5.0.0') < 0){
         $result = '<strong style="color:red">'.$PH[$LANG]['no'].'</strong>';
     } else {
         $passed['php'] = true;
@@ -117,21 +117,21 @@ function get_requirements() {
     $url = str_replace("\\", "/", "http://".$host.DS."__on_mod_rewrite/");
     $ok = @file_get_contents($url);
     $isNginx = true;
-    if (function_exists('apache_get_modules')) {
+    if (function_exists('apache_get_modules')){
         $isNginx = false;
     }
     if (!$isNginx){
-        if (!in_array('mod_rewrite', apache_get_modules()) || $ok != "ok") {
+        if (!in_array('mod_rewrite', apache_get_modules()) || $ok != "ok"){
             $mod_rewrite_reqd = '<strong style="color:red">'.$PH[$LANG]['mrw_notavail'].'</strong>';
             $passed['mod_rewrite'] = false;
         } else {
             $mod_rewrite_reqd = '<strong style="color:green">'.$PH[$LANG]['mrw_avail'].'</strong>';
         }
-    }else{
-        if ($ok != "ok") {
+    } else {
+        if ($ok != "ok"){
             $passed['mod_rewrite'] = false;
             $mod_rewrite_reqd = '<strong style="color:red">'.$PH[$LANG]['mrw_nginxerr'].'</strong>';
-        }else{
+        } else {
             $mod_rewrite_reqd = '<strong style="color:green">'.$PH[$LANG]['mrw_isnginx'].'</strong>';
         }
     }
@@ -141,8 +141,8 @@ function get_requirements() {
     $passed['db'] = $available_dbms['ANY_DB_SUPPORT'];
     unset($available_dbms['ANY_DB_SUPPORT']);
     $mysql_support_reqd = array();
-    foreach ($available_dbms as $db_name => $db_ary) {
-        if (!$db_ary['AVAILABLE']) {
+    foreach ($available_dbms as $db_name => $db_ary){
+        if (!$db_ary['AVAILABLE']){
             $mysql_support_reqd[] = '<span style="color:red">'.$PH[$LANG]['notavail'].'</span>';
         } else {
             $mysql_support_reqd[] = '<strong style="color:green">'.$PH[$LANG]['avail'].'</strong>';
@@ -153,14 +153,14 @@ function get_requirements() {
     umask(0);
     $passed['files'] = true;
     // Try to create the directory if it does not exist
-    if (!file_exists(PATH_ROOT.DS.'cache/')) {
-        if (is_dir(PATH_ROOT.DS.'cache/')) {
+    if (!file_exists(PATH_ROOT.DS.'cache/')){
+        if (is_dir(PATH_ROOT.DS.'cache/')){
             @mkdir(PATH_ROOT.DS.'cache/', 0777);
             u_chmod(PATH_ROOT.DS.'cache/', CHMOD_READ | CHMOD_WRITE);
         }
     }
     // Now really check
-    if (file_exists(PATH_ROOT.DS.'cache/') && is_dir(PATH_ROOT.DS.'cache/')) {
+    if (file_exists(PATH_ROOT.DS.'cache/') && is_dir(PATH_ROOT.DS.'cache/')){
         u_chmod(PATH_ROOT.DS.'cache/', CHMOD_READ | CHMOD_WRITE);
         $exists = true;
     }
@@ -191,7 +191,7 @@ function get_requirements() {
 /**
  * Obtain the information required to connect to the database
  */
-function get_database_settings() {
+function get_database_settings(){
     global $db_config_options, $admin_config_options, $LANG, $PH;
 
     // Obtain any submitted data
@@ -201,9 +201,9 @@ function get_database_settings() {
     $available_dbms = get_available_dbms(false, true);
 
     // Has the user opted to test the connection?
-    if (isset($_POST['testdb'])) {
+    if (isset($_POST['testdb'])){
         $cmtg = true;
-        if (!isset($available_dbms[$data['dbms']]) || !$available_dbms[$data['dbms']]['AVAILABLE']) {
+        if (!isset($available_dbms[$data['dbms']]) || !$available_dbms[$data['dbms']]['AVAILABLE']){
             $error[] = $PH[$LANG]['db_nomysql'];
             $connect_test = false;
         } else {
@@ -219,19 +219,19 @@ function get_database_settings() {
                 $data['dbport']
             );
         }
-        if ($connect_test) {
+        if ($connect_test){
             $connect_success = '<strong style="color:green">'.$PH[$LANG]['db_connok'].'</strong>';
         } else {
             $connect_success = '<strong style="color:red">'.implode('<br />', $error).'</strong>';
         }
     }
 
-    if (!$connect_test) {
+    if (!$connect_test){
 
         // Update the list of available DBMS modules to only contain those which can be used
         $available_dbms_temp = array();
-        foreach ($available_dbms as $type => $dbms_ary) {
-            if (!$dbms_ary['AVAILABLE']) {
+        foreach ($available_dbms as $type => $dbms_ary){
+            if (!$dbms_ary['AVAILABLE']){
                 continue;
             }
             $available_dbms_temp[$type] = $dbms_ary;
@@ -242,17 +242,17 @@ function get_database_settings() {
         // And now for the main part of this page
         $data['table_prefix'] = (!empty($data['table_prefix']) ? $data['table_prefix'] : 'cms_');
         $dcontent = array();
-        foreach ($db_config_options as $config_key => $vars) {
-            if (!is_array($vars) && strpos($config_key, 'legend') === false) {
+        foreach ($db_config_options as $config_key => $vars){
+            if (!is_array($vars) && strpos($config_key, 'legend') === false){
                 continue;
             }
             $options = isset($vars['options']) ? $vars['options'] : '';
         }
     }
 
-    if ($connect_test) {
-        foreach ($db_config_options as $config_key => $vars) {
-            if (!is_array($vars)) {
+    if ($connect_test){
+        foreach ($db_config_options as $config_key => $vars){
+            if (!is_array($vars)){
                 continue;
             }
             $s_hidden_fields .= '<input type="hidden" name="'.$config_key.'" value="'.$data[$config_key].'" />';
@@ -268,16 +268,16 @@ function get_database_settings() {
 /**
  * Writes the config file to disk, or if unable to do so offers alternative methods
  */
-function create_config_file() {
+function create_config_file(){
     global $db_config_options, $admin_config_options, $LANG, $PH;
 
     // Obtain any submitted data
     $data = get_submitted_data();
 
-    if ($data['dbms'] == '') {
+    if ($data['dbms'] == ''){
         // Someone's been silly and tried calling this page direct
         // So we send them back to the start to do it again properly
-        header('Location: /installation');
+        header('Location: /install/');
     }
 
     $written = false;
@@ -287,9 +287,9 @@ function create_config_file() {
     $available_dbms = get_available_dbms($data['dbms']);
     $check_exts = array_merge(array($available_dbms[$data['dbms']]['MODULE']), $php_dlls_other);
 
-    foreach ($check_exts as $dll) {
-        if (!@extension_loaded($dll)) {
-            if (!can_load_dll($dll)) {
+    foreach ($check_exts as $dll){
+        if (!@extension_loaded($dll)){
+            if (!can_load_dll($dll)){
                 continue;
             }
 
@@ -299,7 +299,7 @@ function create_config_file() {
 
     // Create a lock file to indicate that there is an install in progress
     $fp = @fopen(PATH_ROOT.DS.'cache/install_lock', 'wb');
-    if ($fp === false) {
+    if ($fp === false){
         // We were unable to create the lock file - abort
         error('Не удалось записать файл блокировки.', __LINE__, __FILE__);
     }
@@ -362,51 +362,51 @@ if (file_exists('includes/config.pub.php')){
     $config_data .= '?'.'>'; // Done this to prevent highlighting editors getting confused!
 
     // Attempt to write out the config file directly. If it works, this is the easiest way to do it ...
-    if ((file_exists(PATH_ROOT.DS.'includes/config.php') && u_is_writable(PATH_ROOT.DS.'includes/config.php')) || u_is_writable(PATH_ROOT.DS)) {
+    if ((file_exists(PATH_ROOT.DS.'includes/config.php') && u_is_writable(PATH_ROOT.DS.'includes/config.php')) || u_is_writable(PATH_ROOT.DS)){
         // Assume it will work ... if nothing goes wrong below
         $written = true;
 
-        if (!($fp = @fopen(PATH_ROOT.DS.'includes/config.php', 'w'))) {
+        if (!($fp = @fopen(PATH_ROOT.DS.'includes/config.php', 'w'))){
             // Something went wrong ... so let's try another method
             $written = false;
         }
 
-        if (!(@fwrite($fp, $config_data))) {
+        if (!(@fwrite($fp, $config_data))){
             // Something went wrong ... so let's try another method
             $written = false;
         }
 
         @fclose($fp);
 
-        if ($written) {
+        if ($written){
             // We may revert back to chmod() if we see problems with users not able to change their config.php file directly
             u_chmod(PATH_ROOT.DS.'includes/config.php', CHMOD_READ);
         }
     }
 
-    if (isset($_POST['dldone'])) {
+    if (isset($_POST['dldone'])){
         // Do a basic check to make sure that the file has been uploaded
         // Note that all we check is that the file has _something_ in it
         // We don't compare the contents exactly - if they can't upload
         // a single file correctly, it's likely they will have other problems....
-        if (filesize(PATH_ROOT.DS.'includes/config.php') > 10) {
+        if (filesize(PATH_ROOT.DS.'includes/config.php') > 10){
             $written = true;
         }
     }
 
     $config_options = array_merge($db_config_options, $admin_config_options);
 
-    foreach ($config_options as $config_key => $vars) {
-        if (!is_array($vars)) {
+    foreach ($config_options as $config_key => $vars){
+        if (!is_array($vars)){
             continue;
         }
         $s_hidden_fields .= '<input type="hidden" name="'.$config_key.'" value="'.$data[$config_key].'" />';
     }
 
-    if (!$written) {
+    if (!$written){
         // OK, so it didn't work let's try the alternatives
 
-        if (isset($_POST['dlconfig'])) {
+        if (isset($_POST['dlconfig'])){
             // They want a copy of the file to download, so send the relevant headers and dump out the data
             header("Content-Type: text/x-delimtext; name=\"config.php\"");
             header("Content-disposition: attachment; filename=config.php");
@@ -428,7 +428,7 @@ if (file_exists('includes/config.pub.php')){
     include($LANG.'_conf.html');
 }
 
-function get_available_dbms($dbms = false, $return_unavailable = false, $only_20x_options = false) {
+function get_available_dbms($dbms = false, $return_unavailable = false, $only_20x_options = false){
     $available_dbms = array(
         'mysqli' => array(
             'LABEL' => 'MySQL with MySQLi Extension',
@@ -451,17 +451,17 @@ function get_available_dbms($dbms = false, $return_unavailable = false, $only_20
             '2.0.x' => true
         )
     );
-    if ($dbms) {
-        if (isset($available_dbms[$dbms])) {
+    if ($dbms){
+        if (isset($available_dbms[$dbms])){
             $available_dbms = array($dbms => $available_dbms[$dbms]);
         } else {
             return array();
         }
     }
     // now perform some checks whether they are really available
-    foreach ($available_dbms as $db_name => $db_ary) {
-        if ($only_20x_options && !$db_ary['2.0.x']) {
-            if ($return_unavailable) {
+    foreach ($available_dbms as $db_name => $db_ary){
+        if ($only_20x_options && !$db_ary['2.0.x']){
+            if ($return_unavailable){
                 $available_dbms[$db_name]['AVAILABLE'] = false;
             } else {
                 unset($available_dbms[$db_name]);
@@ -471,9 +471,9 @@ function get_available_dbms($dbms = false, $return_unavailable = false, $only_20
 
         $dll = $db_ary['MODULE'];
 
-        if (!@extension_loaded($dll)) {
-            if (!can_load_dll($dll)) {
-                if ($return_unavailable) {
+        if (!@extension_loaded($dll)){
+            if (!can_load_dll($dll)){
+                if ($return_unavailable){
                     $available_dbms[$db_name]['AVAILABLE'] = false;
                 } else {
                     unset($available_dbms[$db_name]);
@@ -484,7 +484,7 @@ function get_available_dbms($dbms = false, $return_unavailable = false, $only_20
         $any_db_support = true;
     }
 
-    if ($return_unavailable) {
+    if ($return_unavailable){
         $available_dbms['ANY_DB_SUPPORT'] = $any_db_support;
     }
     return $available_dbms;
@@ -513,17 +513,17 @@ function get_available_dbms($dbms = false, $return_unavailable = false, $only_20
  * @return bool    true on success, otherwise false
  * @author faw, phpBB Group
  */
-function u_chmod($filename, $perms = CHMOD_READ) {
+function u_chmod($filename, $perms = CHMOD_READ){
     static $_chmod_info;
 
     // Return if the file no longer exists.
-    if (!file_exists($filename)) {
+    if (!file_exists($filename)){
         return false;
     }
 
     // Determine some common vars
-    if (empty($_chmod_info)) {
-        if (!function_exists('fileowner') || !function_exists('filegroup')) {
+    if (empty($_chmod_info)){
+        if (!function_exists('fileowner') || !function_exists('filegroup')){
             // No need to further determine owner/group - it is unknown
             $_chmod_info['process'] = false;
         } else {
@@ -536,7 +536,7 @@ function u_chmod($filename, $perms = CHMOD_READ) {
             $php_gids = (function_exists('posix_getgroups')) ? @posix_getgroups() : false;
 
             // If we are unable to get owner/group, then do not try to set them by guessing
-            if (!$php_uid || empty($php_gids) || !$common_php_owner || !$common_php_group) {
+            if (!$php_uid || empty($php_gids) || !$common_php_owner || !$common_php_group){
                 $_chmod_info['process'] = false;
             } else {
                 $_chmod_info = array(
@@ -550,33 +550,33 @@ function u_chmod($filename, $perms = CHMOD_READ) {
         }
     }
 
-    if ($_chmod_info['process']) {
+    if ($_chmod_info['process']){
         $file_uid = @fileowner($filename);
         $file_gid = @filegroup($filename);
 
         // Change owner
-        if (@chown($filename, $_chmod_info['common_owner'])) {
+        if (@chown($filename, $_chmod_info['common_owner'])){
             clearstatcache();
             $file_uid = @fileowner($filename);
         }
 
         // Change group
-        if (@chgrp($filename, $_chmod_info['common_group'])) {
+        if (@chgrp($filename, $_chmod_info['common_group'])){
             clearstatcache();
             $file_gid = @filegroup($filename);
         }
 
         // If the file_uid/gid now match the one from common.php we can process further, else we are not able to change something
-        if ($file_uid != $_chmod_info['common_owner'] || $file_gid != $_chmod_info['common_group']) {
+        if ($file_uid != $_chmod_info['common_owner'] || $file_gid != $_chmod_info['common_group']){
             $_chmod_info['process'] = false;
         }
     }
 
     // Still able to process?
-    if ($_chmod_info['process']) {
-        if ($file_uid == $_chmod_info['php_uid']) {
+    if ($_chmod_info['process']){
+        if ($file_uid == $_chmod_info['php_uid']){
             $php = 'owner';
-        } else if (in_array($file_gid, $_chmod_info['php_gids'])) {
+        } else if (in_array($file_gid, $_chmod_info['php_gids'])){
             $php = 'group';
         } else {
             // Since we are setting the everyone bit anyway, no need to do expensive operations
@@ -585,28 +585,28 @@ function u_chmod($filename, $perms = CHMOD_READ) {
     }
 
     // We are not able to determine or change something
-    if (!$_chmod_info['process']) {
+    if (!$_chmod_info['process']){
         $php = 'other';
     }
 
     // Owner always has read/write permission
     $owner = CHMOD_READ | CHMOD_WRITE;
-    if (is_dir($filename)) {
+    if (is_dir($filename)){
         $owner |= CHMOD_EXECUTE;
 
         // Only add execute bit to the permission if the dir needs to be readable
-        if ($perms & CHMOD_READ) {
+        if ($perms & CHMOD_READ){
             $perms |= CHMOD_EXECUTE;
         }
     }
 
-    switch ($php) {
+    switch ($php){
         case 'owner':
             $result = @chmod($filename, ($owner << 6) + (0 << 3) + (0 << 0));
 
             clearstatcache();
 
-            if (is_readable($filename) && u_is_writable($filename)) {
+            if (is_readable($filename) && u_is_writable($filename)){
                 break;
             }
 
@@ -615,7 +615,7 @@ function u_chmod($filename, $perms = CHMOD_READ) {
 
             clearstatcache();
 
-            if ((!($perms & CHMOD_READ) || is_readable($filename)) && (!($perms & CHMOD_WRITE) || u_is_writable($filename))) {
+            if ((!($perms & CHMOD_READ) || is_readable($filename)) && (!($perms & CHMOD_WRITE) || u_is_writable($filename))){
                 break;
             }
 
@@ -624,7 +624,7 @@ function u_chmod($filename, $perms = CHMOD_READ) {
 
             clearstatcache();
 
-            if ((!($perms & CHMOD_READ) || is_readable($filename)) && (!($perms & CHMOD_WRITE) || u_is_writable($filename))) {
+            if ((!($perms & CHMOD_READ) || is_readable($filename)) && (!($perms & CHMOD_WRITE) || u_is_writable($filename))){
                 break;
             }
 
@@ -640,7 +640,7 @@ function u_chmod($filename, $perms = CHMOD_READ) {
 /**
  * Determine if we are able to load a specified PHP module and do so if possible
  */
-function can_load_dll($dll) {
+function can_load_dll($dll){
     // SQLite2 is a tricky thing, from 5.0.0 it requires PDO; if PDO is not loaded we must state that SQLite is unavailable
     // as the installer doesn't understand that the extension has a prerequisite.
     //
@@ -650,7 +650,7 @@ function can_load_dll($dll) {
     // Net result we'll disable automatic inclusion of SQLite support
     //
     // See: r9618 and #56105
-    if ($dll == 'sqlite') {
+    if ($dll == 'sqlite'){
         return false;
     }
     return ((@ini_get('enable_dl') || strtolower(@ini_get('enable_dl')) == 'on') && (!@ini_get('safe_mode') || strtolower(@ini_get('safe_mode')) == 'off') && function_exists('dl') && @dl($dll.'.'.PHP_SHLIB_SUFFIX)) ? true : false;
@@ -665,17 +665,17 @@ function can_load_dll($dll) {
  * @param string $file Path to perform write test on
  * @return bool True when the path is writable, otherwise false.
  */
-function u_is_writable($file) {
-    if (strtolower(substr(PHP_OS, 0, 3)) === 'win' || !function_exists('is_writable')) {
-        if (file_exists($file)) {
+function u_is_writable($file){
+    if (strtolower(substr(PHP_OS, 0, 3)) === 'win' || !function_exists('is_writable')){
+        if (file_exists($file)){
             // Canonicalise path to absolute path
             $file = u_realpath($file);
 
-            if (is_dir($file)) {
+            if (is_dir($file)){
                 // Test directory by creating a file inside the directory
                 $result = @tempnam($file, 'i_w');
 
-                if (is_string($result) && file_exists($result)) {
+                if (is_string($result) && file_exists($result)){
                     unlink($result);
 
                     // Ensure the file is actually in the directory (returned realpathed)
@@ -684,7 +684,7 @@ function u_is_writable($file) {
             } else {
                 $handle = @fopen($file, 'r+');
 
-                if (is_resource($handle)) {
+                if (is_resource($handle)){
                     fclose($handle);
                     return true;
                 }
@@ -693,7 +693,7 @@ function u_is_writable($file) {
             // file does not exist test if we can write to the directory
             $dir = dirname($file);
 
-            if (file_exists($dir) && is_dir($dir) && u_is_writable($dir)) {
+            if (file_exists($dir) && is_dir($dir) && u_is_writable($dir)){
                 return true;
             }
         }
@@ -707,7 +707,7 @@ function u_is_writable($file) {
 /**
  * Get submitted data
  */
-function get_submitted_data() {
+function get_submitted_data(){
     return array(
         'language' => basename(request_var('language', '')),
         'dbms' => request_var('dbms', ''),
@@ -743,27 +743,27 @@ function get_submitted_data() {
     );
 }
 
-function request_var($var_name, $default, $multibyte = false, $cookie = false) {
-    if (!$cookie && isset($_COOKIE[$var_name])) {
-        if (!isset($_GET[$var_name]) && !isset($_POST[$var_name])) {
+function request_var($var_name, $default, $multibyte = false, $cookie = false){
+    if (!$cookie && isset($_COOKIE[$var_name])){
+        if (!isset($_GET[$var_name]) && !isset($_POST[$var_name])){
             return (is_array($default)) ? array() : $default;
         }
         $_REQUEST[$var_name] = isset($_POST[$var_name]) ? $_POST[$var_name] : $_GET[$var_name];
     }
 
     $super_global = ($cookie) ? '_COOKIE' : '_REQUEST';
-    if (!isset($GLOBALS[$super_global][$var_name]) || is_array($GLOBALS[$super_global][$var_name]) != is_array($default)) {
+    if (!isset($GLOBALS[$super_global][$var_name]) || is_array($GLOBALS[$super_global][$var_name]) != is_array($default)){
         return (is_array($default)) ? array() : $default;
     }
 
     $var = $GLOBALS[$super_global][$var_name];
-    if (!is_array($default)) {
+    if (!is_array($default)){
         $type = gettype($default);
     } else {
         list($key_type, $type) = each($default);
         $type = gettype($type);
         $key_type = gettype($key_type);
-        if ($type == 'array') {
+        if ($type == 'array'){
             reset($default);
             $default = current($default);
             list($sub_key_type, $sub_type) = each($default);
@@ -773,22 +773,22 @@ function request_var($var_name, $default, $multibyte = false, $cookie = false) {
         }
     }
 
-    if (is_array($var)) {
+    if (is_array($var)){
         $_var = $var;
         $var = array();
 
-        foreach ($_var as $k => $v) {
+        foreach ($_var as $k => $v){
             set_var($k, $k, $key_type);
-            if ($type == 'array' && is_array($v)) {
-                foreach ($v as $_k => $_v) {
-                    if (is_array($_v)) {
+            if ($type == 'array' && is_array($v)){
+                foreach ($v as $_k => $_v){
+                    if (is_array($_v)){
                         $_v = null;
                     }
                     set_var($_k, $_k, $sub_key_type, $multibyte);
                     set_var($var[$k][$_k], $_v, $sub_type, $multibyte);
                 }
             } else {
-                if ($type == 'array' || is_array($v)) {
+                if ($type == 'array' || is_array($v)){
                     $v = null;
                 }
                 set_var($var[$k], $v, $type, $multibyte);
@@ -808,11 +808,11 @@ function request_var($var_name, $default, $multibyte = false, $cookie = false) {
  *
  * @access private
  */
-function set_var(&$result, $var, $type, $multibyte = false) {
+function set_var(&$result, $var, $type, $multibyte = false){
     settype($var, $type);
     $result = $var;
 
-    if ($type == 'string') {
+    if ($type == 'string'){
         $result = trim(htmlspecialchars(str_replace(array(
             "\r\n",
             "\r",
@@ -823,10 +823,10 @@ function set_var(&$result, $var, $type, $multibyte = false) {
             ''
         ), $result), ENT_COMPAT, 'UTF-8'));
 
-        if (!empty($result)) {
+        if (!empty($result)){
             // Make sure multibyte characters are wellformed
-            if ($multibyte) {
-                if (!preg_match('/^./u', $result)) {
+            if ($multibyte){
+                if (!preg_match('/^./u', $result)){
                     $result = '';
                 }
             } else {
@@ -842,7 +842,7 @@ function set_var(&$result, $var, $type, $multibyte = false) {
 /**
  * Generate the drop down of available database options
  */
-function dbms_select($default = '', $only_20x_options = false) {
+function dbms_select($default = '', $only_20x_options = false){
     $available_dbms = get_available_dbms(false, false, $only_20x_options);
     $dbms_options = '';
     $bdname = array(
@@ -859,17 +859,17 @@ function dbms_select($default = '', $only_20x_options = false) {
 
     );
 
-    foreach ($available_dbms as $dbms_name => $details) {
+    foreach ($available_dbms as $dbms_name => $details){
         $selected = ($dbms_name == $default) ? ' selected="selected"' : '';
         $dbms_options .= '<option value="'.$dbms_name.'"'.$selected.'>'.$bdname[strtoupper($dbms_name)].'</option>';
     }
     return $dbms_options;
 }
 
-function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix, $dbhost, $dbuser, $dbpasswd, $dbname, $dbport, $prefix_may_exist = false, $load_dbal = true, $unicode_check = true) {
+function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix, $dbhost, $dbuser, $dbpasswd, $dbname, $dbport, $prefix_may_exist = false, $load_dbal = true, $unicode_check = true){
     global $PH, $LANG;
     $dbms = $dbms_details['DRIVER'];
-    if ($load_dbal) {
+    if ($load_dbal){
         // Include the DB layer
         include(PATH_INSTALLATION.DS.'db/'.$dbms.'.php');
     }
@@ -879,22 +879,22 @@ function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix,
     $db->sql_return_on_error(true);
 
     // Check that we actually have a database name before going any further.....
-    if ($dbms_details['DRIVER'] != 'sqlite' && $dbms_details['DRIVER'] != 'oracle' && $dbname === '') {
+    if ($dbms_details['DRIVER'] != 'sqlite' && $dbms_details['DRIVER'] != 'oracle' && $dbname === ''){
         $error[] = $PH[$LANG]['db_notname'];
         return false;
     }
 
     // Make sure we don't have a daft user who thinks having the SQLite database in the forum directory is a good idea
-    if ($dbms_details['DRIVER'] == 'sqlite' && stripos(u_realpath($dbhost), u_realpath('../')) === 0) {
+    if ($dbms_details['DRIVER'] == 'sqlite' && stripos(u_realpath($dbhost), u_realpath('../')) === 0){
         $error[] = 'Указанный файл базы данных находится в папке движка. Необходимо переместить его в папку, недоступную из интернета';
         return false;
     }
 
     // Check the prefix length to ensure that index names are not too long and does not contain invalid characters
-    switch ($dbms_details['DRIVER']) {
+    switch ($dbms_details['DRIVER']){
         case 'mysql':
         case 'mysqli':
-            if (strspn($table_prefix, '-./\\') !== 0) {
+            if (strspn($table_prefix, '-./\\') !== 0){
                 $error[] = $PH[$LANG]['db_erprefix'];
                 return false;
             }
@@ -921,18 +921,18 @@ function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix,
             break;
     }
 
-    if (strlen($table_prefix) > $prefix_length) {
+    if (strlen($table_prefix) > $prefix_length){
         $error[] = sprintf($PH[$LANG]['db_erprefixlen'], $prefix_length);
         return false;
     }
 
     // Try and connect ...
-    if (is_array($db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname, $dbport, false, true))) {
+    if (is_array($db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname, $dbport, false, true))){
         $db_error = $db->sql_error();
         $error[] = $PH[$LANG]['db_errtext'].'<br />'.(($db_error['message']) ? $db_error['message'] : $PH[$LANG]['db_noterr']);
     } else {
         // Likely matches for an existing phpBB installation
-        if (!$prefix_may_exist) {
+        if (!$prefix_may_exist){
             $temp_prefix = strtolower($table_prefix);
             $table_ary = array(
                 $temp_prefix.'attachments',
@@ -946,38 +946,38 @@ function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix,
             $tables = array_map('strtolower', $tables);
             $table_intersect = array_intersect($tables, $table_ary);
 
-            if (sizeof($table_intersect)) {
+            if (sizeof($table_intersect)){
                 $error[] = $PH[$LANG]['db_errprefixex'];
             }
         }
 
         // Make sure that the user has selected a sensible DBAL for the DBMS actually installed
-        switch ($dbms_details['DRIVER']) {
+        switch ($dbms_details['DRIVER']){
             case 'mysqli':
-                if (version_compare(mysqli_get_server_info($db->db_connect_id), '4.1.3', '<')) {
+                if (version_compare(mysqli_get_server_info($db->db_connect_id), '4.1.3', '<')){
                     $error[] = 'Установленная на сервере версия MySQL несовместима с выбранным вариантом «MySQL с расширением MySQLi». Вместо него попробуйте выбрать вариант «MySQL».';
                 }
                 break;
 
             case 'sqlite':
-                if (version_compare(sqlite_libversion(), '2.8.2', '<')) {
+                if (version_compare(sqlite_libversion(), '2.8.2', '<')){
                     $error[] = 'У вас установлена устаревшая версия расширения SQLite. Её необходимо обновить хотя бы до версии 2.8.2.';
                 }
                 break;
 
             case 'firebird':
                 // check the version of FB, use some hackery if we can't get access to the server info
-                if ($db->service_handle !== false && function_exists('ibase_server_info')) {
+                if ($db->service_handle !== false && function_exists('ibase_server_info')){
                     $val = @ibase_server_info($db->service_handle, IBASE_SVC_SERVER_VERSION);
                     preg_match('#V([\d.]+)#', $val, $match);
-                    if ($match[1] < 2) {
+                    if ($match[1] < 2){
                         $error[] = 'Установленная на сервере версия Firebird старее 2.1. Обновите базу данных до новой версии.';
                     }
                     $db_info = @ibase_db_info($db->service_handle, $dbname, IBASE_STS_HDR_PAGES);
 
                     preg_match('/^\\s*Page size\\s*(\\d+)/m', $db_info, $regs);
                     $page_size = intval($regs[1]);
-                    if ($page_size < 8192) {
+                    if ($page_size < 8192){
                         $error[] = 'У вас установлена устаревшая версия расширения SQLite. Её необходимо обновить хотя бы до версии 2.8.2.';
                     }
                 } else {
@@ -990,7 +990,7 @@ function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix,
                     $db->sql_freeresult($result);
 
                     // if its a UDF, its too old
-                    if ($row) {
+                    if ($row){
                         $error[] = 'Установленная на сервере версия Firebird старее 2.1. Обновите базу данных до новой версии.';
                     } else {
                         $sql = 'SELECT 1 FROM RDB$DATABASE
@@ -1010,7 +1010,7 @@ function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix,
 
                     $final = '';
 
-                    for ($i = 0; $i < $char_len; $i++) {
+                    for ($i = 0; $i < $char_len; $i++){
                         $final .= $char_array[mt_rand(0, $char_array_len)];
                     }
 
@@ -1024,7 +1024,7 @@ function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix,
                     $sql = 'CREATE INDEX '.$final.' ON '.$final.'(FIELD1, FIELD2);';
                     $db->sql_query($sql);
 
-                    if (ibase_errmsg() !== false) {
+                    if (ibase_errmsg() !== false){
                         $error[] = 'Выбранная база данных Firebird имеет размер страницы меньше 8192. Размер страницы должен быть не менее 8192.';
                     } else {
                         // Kill the old table
@@ -1035,32 +1035,32 @@ function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix,
                 break;
 
             case 'oracle':
-                if ($unicode_check) {
+                if ($unicode_check){
                     $sql = "SELECT *
 						FROM NLS_DATABASE_PARAMETERS
 						WHERE PARAMETER = 'NLS_RDBMS_VERSION'
 							OR PARAMETER = 'NLS_CHARACTERSET'";
                     $result = $db->sql_query($sql);
 
-                    while ($row = $db->sql_fetchrow($result)) {
+                    while ($row = $db->sql_fetchrow($result)){
                         $stats[$row['parameter']] = $row['value'];
                     }
                     $db->sql_freeresult($result);
 
-                    if (version_compare($stats['NLS_RDBMS_VERSION'], '9.2', '<') && $stats['NLS_CHARACTERSET'] !== 'UTF8') {
+                    if (version_compare($stats['NLS_RDBMS_VERSION'], '9.2', '<') && $stats['NLS_CHARACTERSET'] !== 'UTF8'){
                         $error[] = 'Для установленной на сервере версии Oracle необходимо установить значение параметра <var>NLS_CHARACTERSET</var> равным <var>UTF8</var>. Либо обновите базу данных до версии 9.2 или выше, либо измените значение параметра.';
                     }
                 }
                 break;
 
             case 'postgres':
-                if ($unicode_check) {
+                if ($unicode_check){
                     $sql = "SHOW server_encoding;";
                     $result = $db->sql_query($sql);
                     $row = $db->sql_fetchrow($result);
                     $db->sql_freeresult($result);
 
-                    if ($row['server_encoding'] !== 'UNICODE' && $row['server_encoding'] !== 'UTF8') {
+                    if ($row['server_encoding'] !== 'UNICODE' && $row['server_encoding'] !== 'UTF8'){
                         $error[] = 'Выбранная база данных создана не с кодировкой <var>UNICODE</var> или <var>UTF8</var>. Попробуйте установить движок в базу данных с кодировкой <var>UNICODE</var> или <var>UTF8</var>.';
                     }
                 }
@@ -1069,7 +1069,7 @@ function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix,
 
     }
 
-    if ($error_connect && (!isset($error) || !sizeof($error))) {
+    if ($error_connect && (!isset($error) || !sizeof($error))){
         return true;
     }
     return false;
@@ -1078,8 +1078,8 @@ function connect_check_db($error_connect, &$error, $dbms_details, $table_prefix,
 /**
  * Get tables of a database
  */
-function get_tables($db) {
-    switch ($db->sql_layer) {
+function get_tables($db){
+    switch ($db->sql_layer){
         case 'mysql':
         case 'mysql4':
         case 'mysqli':
@@ -1122,7 +1122,7 @@ function get_tables($db) {
 
     $tables = array();
 
-    while ($row = $db->sql_fetchrow($result)) {
+    while ($row = $db->sql_fetchrow($result)){
         $tables[] = current($row);
     }
 
@@ -1135,8 +1135,8 @@ function get_tables($db) {
  * Output an error message
  * If skip is true, return and continue execution, else exit
  */
-function error($error, $line, $file, $skip = false) {
-    if ($skip) {
+function error($error, $line, $file, $skip = false){
+    if ($skip){
         $legend = 'Error during installation';
         $title = basename($file).' [ '.$line.' ]';
         $result = '<b style="color:red">'.$error.'</b>';
@@ -1175,34 +1175,34 @@ function error($error, $line, $file, $skip = false) {
     echo '</body>';
     echo '</html>';
 
-    if (!empty($db) && is_object($db)) {
+    if (!empty($db) && is_object($db)){
         $db->sql_close();
     }
 
     exit_handler();
 }
 
-function exit_handler() {
+function exit_handler(){
     // As a pre-caution... some setups display a blank page if the flush() is not there.
     (ob_get_level() > 0) ? @ob_flush() : @flush();
 
     exit;
 }
 
-if (!function_exists('realpath')) {
+if (!function_exists('realpath')){
     /**
      * A wrapper for realpath
      *
      * @ignore
      */
-    function u_realpath($path) {
+    function u_realpath($path){
         return u_own_realpath($path);
     }
 } else {
     /**
      * A wrapper for realpath
      */
-    function u_realpath($path) {
+    function u_realpath($path){
         return realpath($path);
         /*
         $realpath = realpath($path);
@@ -1224,7 +1224,7 @@ if (!function_exists('realpath')) {
         /**/
     }
 }
-function u_own_realpath($path) {
+function u_own_realpath($path){
     // Now to perform funky shizzle
 
     // Switch to use UNIX slashes
@@ -1232,10 +1232,10 @@ function u_own_realpath($path) {
     $path_prefix = '';
 
     // Determine what sort of path we have
-    if (is_absolute($path)) {
+    if (is_absolute($path)){
         $absolute = true;
 
-        if ($path[0] == '/') {
+        if ($path[0] == '/'){
             // Absolute path, *NIX style
             $path_prefix = '';
         } else {
@@ -1247,17 +1247,17 @@ function u_own_realpath($path) {
     } else {
         // Relative Path
         // Prepend the current working directory
-        if (function_exists('getcwd')) {
+        if (function_exists('getcwd')){
             // This is the best method, hopefully it is enabled!
             $path = str_replace(DIRECTORY_SEPARATOR, '/', getcwd()).'/'.$path;
             $absolute = true;
-            if (preg_match('#^[a-z]:#i', $path)) {
+            if (preg_match('#^[a-z]:#i', $path)){
                 $path_prefix = $path[0].':';
                 $path = substr($path, 2);
             } else {
                 $path_prefix = '';
             }
-        } else if (isset($_SERVER['SCRIPT_FILENAME']) && !empty($_SERVER['SCRIPT_FILENAME'])) {
+        } else if (isset($_SERVER['SCRIPT_FILENAME']) && !empty($_SERVER['SCRIPT_FILENAME'])){
             // Warning: If chdir() has been used this will lie!
             // Warning: This has some problems sometime (CLI can create them easily)
             $path = str_replace(DIRECTORY_SEPARATOR, '/', dirname($_SERVER['SCRIPT_FILENAME'])).'/'.$path;
@@ -1283,11 +1283,11 @@ function u_own_realpath($path) {
     $bits = array_values(array_diff($bits, array('.')));
 
     // Lets get looping, run over and resolve any .. (up directory)
-    for ($i = 0, $max = sizeof($bits); $i < $max; $i++) {
+    for ($i = 0, $max = sizeof($bits); $i < $max; $i++){
         // @todo Optimise
-        if ($bits[$i] == '..') {
-            if (isset($bits[$i - 1])) {
-                if ($bits[$i - 1] != '..') {
+        if ($bits[$i] == '..'){
+            if (isset($bits[$i - 1])){
+                if ($bits[$i - 1] != '..'){
                     // We found a .. and we are able to traverse upwards, lets do it!
                     unset($bits[$i]);
                     unset($bits[$i - 1]);
@@ -1314,10 +1314,10 @@ function u_own_realpath($path) {
     // Check if we are able to resolve symlinks, Windows cannot.
     $symlink_resolve = (function_exists('readlink')) ? true : false;
 
-    foreach ($bits as $i => $bit) {
-        if (@is_dir("$resolved/$bit") || ($i == $max && @is_file("$resolved/$bit"))) {
+    foreach ($bits as $i => $bit){
+        if (@is_dir("$resolved/$bit") || ($i == $max && @is_file("$resolved/$bit"))){
             // Path Exists
-            if ($symlink_resolve && is_link("$resolved/$bit") && ($link = readlink("$resolved/$bit"))) {
+            if ($symlink_resolve && is_link("$resolved/$bit") && ($link = readlink("$resolved/$bit"))){
                 // Resolved a symlink.
                 $resolved = $link.(($i == $max) ? '' : '/');
                 continue;
@@ -1333,7 +1333,7 @@ function u_own_realpath($path) {
     // @todo If the file exists fine and open_basedir only has one path we should be able to prepend it
     // because we must be inside that basedir, the question is where...
     // @internal The slash in is_dir() gets around an open_basedir restriction
-    if (!@file_exists($resolved) || (!@is_dir($resolved.'/') && !is_file($resolved))) {
+    if (!@file_exists($resolved) || (!@is_dir($resolved.'/') && !is_file($resolved))){
         return false;
     }
 
@@ -1341,11 +1341,9 @@ function u_own_realpath($path) {
     $resolved = str_replace('/', DIRECTORY_SEPARATOR, $resolved);
 
     // Check for DIRECTORY_SEPARATOR at the end (and remove it!)
-    if (substr($resolved, -1) == DIRECTORY_SEPARATOR) {
+    if (substr($resolved, -1) == DIRECTORY_SEPARATOR){
         return substr($resolved, 0, -1);
     }
 
     return $resolved; // We got here, in the end!
 }
-
-?>

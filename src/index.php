@@ -60,10 +60,9 @@ if ($LANG == 'ru'){
 		case 5: include('ru_license.html'); break;
 		case 6: include('ru_support.html'); break;
 		case 7: error('Удалите папку install!','71','index.php'); break;
-		default: include('language.html'); break; 
+		default: include('language.html'); break;
 	}
 }else{
-
 	switch($page){
 		case 1: get_requirements(); break;
 		case 2: get_database_settings(); break;
@@ -74,7 +73,4 @@ if ($LANG == 'ru'){
 		case 7: error('Install folder remove!','71','index.php'); break;
 		default: include('language.html'); break;
 	}
-	
 }
-
-?>

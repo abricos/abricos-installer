@@ -810,5 +810,3 @@ class dbal {
  * This variable holds the class name to use later
  */
 $sql_db = (!empty($dbms)) ? 'dbal_'.basename($dbms) : 'dbal';
-
-?>
